@@ -82,7 +82,7 @@ void vert_speed(){
   Serial.print(verticalSpeed);
   Serial.print(" ft/min ");
 
-  lcd.setCursor(5, 1);
+  lcd.setCursor(7, 1);
   lcd.print(verticalSpeed);
   lcd.print("    ");
 

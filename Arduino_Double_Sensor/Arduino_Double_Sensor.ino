@@ -83,7 +83,7 @@ void loop() {
 //-----------------------------------------------------------------------------------------------//
 
 void vert_speed(){
-    if (! bmp.performReading()) {
+  if (! bmp.performReading()) {
   Serial.println("Failed to perform reading :(");
   return;
   }

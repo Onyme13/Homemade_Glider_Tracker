@@ -1,5 +1,7 @@
 import serial
+from datetime import datetime
 
+#TODO transmit local QNH, transmit local time
 
 arduinoSerial = serial.Serial('COM4',9600)
 
@@ -9,6 +11,8 @@ HETCOPASCALMETERSOFAIR = 7.8880172892718
 FEETSPERMETER = 3.28084
 
 returnDict = {
+        "time": 0,
+        "localQNH": 0,
         "lat" : 0,
         "long" : 0,
         "speed": 0,
@@ -35,9 +39,8 @@ def adapt_local_pressure(altGPS,alt):
     altitude_proximity_counter=0
     
     altGPSArray.append(altGPS)
-    print("prox",altitude_proximity_counter)
     
-    if len(altGPSArray) > 10:
+    if len(altGPSArray) > 20:
         altGPSArray.pop(0)
         for x in range (len(altGPSArray)):
             for y in range (len(altGPSArray)):
@@ -46,8 +49,8 @@ def adapt_local_pressure(altGPS,alt):
                 else:
                     break
 
-    if altitude_proximity_counter == 100:
-        localQNH = SEALEVELPRESSURE + ((sum(altGPSArray)/10)-alt) * METERSOFAIRHETCOPASCAL
+    if altitude_proximity_counter == 400:
+        localQNH = SEALEVELPRESSURE + ((sum(altGPSArray)/20)-alt) * METERSOFAIRHETCOPASCAL
         heightCalibrated = round((localQNH - SEALEVELPRESSURE) * HETCOPASCALMETERSOFAIR,1)
         calibrated=True
 
@@ -72,31 +75,37 @@ def vertical_speed(alt):
     return verticalSpeed #TODO Return something else 
 
 
-
+#main function that processes data
 def data():
     while(arduinoSerial.inWaiting()==0):
         pass
     dataString = arduinoSerial.readline().decode('utf-8')
     dataArray = dataString.replace('\r\n','').split(',')
 
-
+    localtime = datetime.now()
+    localtime = localtime.strftime("%H:%M:%S.%f")[:-3]
+    returnDict.update({
+        'time':localtime
+    })
+    
     #If lenght of dataArray is only one, this means the only output is barometric height
     if len(dataArray) == 1:
         altitude = float(dataArray[0])
-        returnDict.update({"alt":altitude})
         #altitude = float(dataArray[0])
         if calibrated: #If QNH is calibrated, adjust the height.
-            altitude+= heightCalibrated
+            altitude += heightCalibrated
+        
+        returnDict.update({"alt":altitude})
         
     #dataArray[latitude, longitude, speed, altitude of GPS, altitude barometric] (metric system)
-    if len(dataArray) == 5:
+    if len(dataArray) >= 5:
 
         latitude = float(dataArray[0]) 
         longitude = float(dataArray[1])
         speed = float(dataArray[2])
         altitudeGPS = float(dataArray[3])
         satellites = float(dataArray[4])
-        altitude = float(dataArray[5])
+        altitude = float(dataArray[-1])
         
         if calibrated: #If QNH is calibrated, adjust the height.
             altitude += heightCalibrated
@@ -112,6 +121,13 @@ def data():
             "altGPS": altitudeGPS,
             "sat":satellites,
             "alt": altitude
-        })    
+        })
+    #print serial data from Arduino
+    #print(dataArray)
+    print(returnDict)
     return returnDict
 
+#testing output data
+while True:
+    #pass
+    data()

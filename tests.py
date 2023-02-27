@@ -1,27 +1,17 @@
-import PySimpleGUI as sg
-import time
+import matplotlib.pyplot as plt
+from matplotlib import animation
+import cartopy.crs as ccrs
 
-# ----------------  Create Form  ----------------
-sg.theme('Black')
-sg.set_options(element_padding=(0, 0))
+fig, ax = plt.subplots()
 
-layout = [[sg.Text('')],
-         [sg.Text(size=(8, 2), font=('Helvetica', 20), justification='center', key='text')],
-         [sg.Button('Pause', key='button', button_color=('white', '#001480')),
-          sg.Button('Reset', button_color=('white', '#007339'), key='Reset'),
-          sg.Exit(button_color=('white', 'firebrick4'), key='Exit')]]
+#SET AXES FOR PLOTTING AREA
+ax=plt.axes(projection=ccrs.PlateCarree())
+ax.set_ylim(40.6051,40.6825)
+ax.set_xlim(-73.8288,-73.7258)
 
-window = sg.Window('Running Timer', layout, no_titlebar=True, auto_size_buttons=False, keep_on_top=True, grab_anywhere=True)
+#ADD OSM BASEMAP
+#ax.add_image(osm_tiles,13) #Zoom level 13
 
-# ----------------  main loop  ----------------
-current_time = 0
-paused = False
-start_time = int(round(time.time() * 100))
-while (True):
-    # --------- Read and update window --------
-    event, values = window.read(timeout=10)
-    current_time = int(round(time.time() * 100)) - start_time
-    # --------- Display timer in window --------
-    window['text'].update('{:02d}:{:02d}.{:02d}'.format((current_time // 100) // 60,
-                                                                  (current_time // 100) % 60,
-                                                                  current_time % 100))
+#PLOT JFK INTL AIRPORT
+ax.text(-73.778889,40.639722,'JFK Intl',horizontalalignment='right',size='large')
+ax.plot([-73.778889],[40.639722],'bo') #Plot a point in blue color

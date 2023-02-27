@@ -1,10 +1,7 @@
 import PySimpleGUI as sg
 from PIL import Image
 from datetime import datetime
-import folium
-from IPython.display import display
 
-#from main import *
 
 
 #data() ==> Dict[time,lat,lon,speed,altGPS,sat,alt]
@@ -13,11 +10,6 @@ currentDateAndTime = datetime.now()
 currentTime = currentDateAndTime.strftime("%H:%M:%S")
 image_setting = './images/settings.png'
 
-test_coordonnee = [46.600210,6.376650]
-
-map = folium.Map(location= test_coordonnee, zoom_start = 13) 
-
-display(map)
 
 
 first_column = [[sg.T('ALT',text_color='#FFFFFF',background_color='#000000',font=('Regular',13))],
@@ -56,7 +48,7 @@ layout = [
     ] 
 ]
 
-window = sg.Window("Demo",layout, size=(320,480), background_color='#000000',margins=(0,5))
+window = sg.Window("Demo",layout,  background_color='#000000',margins=(0,5))
 
 #TODO put data() into a dict insteed of calling the function each time..
 while True:
@@ -89,7 +81,7 @@ while True:
     #window['-TEXT-'].update(verticalSpeed)
     """
 
-    #if event == sg.WIN_CLOSED or event == 'Exit':
-    #    break
-    #window.close()
+#    if event == sg.WIN_CLOSED or event == 'Exit':
+#        break
+#    window.close()
 

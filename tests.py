@@ -15,3 +15,4 @@ ax.set_xlim(-73.8288,-73.7258)
 #PLOT JFK INTL AIRPORT
 ax.text(-73.778889,40.639722,'JFK Intl',horizontalalignment='right',size='large')
 ax.plot([-73.778889],[40.639722],'bo') #Plot a point in blue color
+plt.show()

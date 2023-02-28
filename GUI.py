@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import PySimpleGUI as sg
 from PIL import Image
 from datetime import datetime

@@ -2,7 +2,7 @@
 import serial
 from datetime import datetime
 
-#TODO transmit local QNH, transmit local time
+#TODO transmit local QNH, transmit local time for data keeping
 
 arduinoSerial = serial.Serial('COM4',9600)
 
@@ -95,7 +95,8 @@ def data():
         #altitude = float(dataArray[0])
         if calibrated: #If QNH is calibrated, adjust the height.
             altitude += heightCalibrated
-        
+            returnDict.update({'localQNH':localQNH})
+
         returnDict.update({"alt":altitude})
         
     #dataArray[latitude, longitude, speed, altitude of GPS, altitude barometric] (metric system)
@@ -125,10 +126,10 @@ def data():
         })
     #print serial data from Arduino
     #print(dataArray)
-    print(returnDict)
+    #print(returnDict)
     return returnDict
 
 #testing output data
-while True:
-    #pass
-    data()
+#while True:
+#    pass
+#    data()

@@ -16,7 +16,7 @@ first_column = [[sg.T('ALT',text_color='#FFFFFF',background_color='#000000',font
                 [sg.T('0000 m',text_color='#FFFFFF',background_color='#000000',font=('Regular',13),key='-ALT-')]]
 
 second_column = [[sg.T('THERM.',text_color='#FFFFFF',background_color='#000000',font=('Regular',13))],
-                [sg.T('10 m/s',text_color='#FFFFFF',background_color='#000000',font=('Regular',13),key='-THERM-')]]
+                [sg.T('00 m/s',text_color='#FFFFFF',background_color='#000000',font=('Regular',13),key='-THERM-')]]
 
 third_column =[[sg.T('SPEED',text_color='#FFFFFF',background_color='#000000',font=('Regular',13))],
                 [sg.T('000 km/h',text_color='#FFFFFF',background_color='#000000',font=('Regular',13),key='-SPEED-')]]
@@ -48,11 +48,11 @@ layout = [
     ] 
 ]
 
-window = sg.Window("Demo",layout,  background_color='#000000',margins=(0,5))
+window = sg.Window("Demo",layout, background_color='#000000',margins=(0,5))
 
 #TODO put data() into a dict insteed of calling the function each time..
 while True:
-    event, values = window.read(timeout=0)
+    event, values = window.read(timeout=1)
     
     """    #data() ==> Dict[lat,lon,speed,altGPS,sat,alt]
     satellites = str((data()['sat']))    
@@ -81,7 +81,7 @@ while True:
     #window['-TEXT-'].update(verticalSpeed)
     """
 
-#    if event == sg.WIN_CLOSED or event == 'Exit':
-#        break
-#    window.close()
+    if event == sg.WIN_CLOSED or event == 'Exit':
+        window.close()
+        break
 

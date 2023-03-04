@@ -1,6 +1,6 @@
 from tkinter import * 
 from tkinter import ttk 
-import time
+import datetime
 from main import *
 
 from PIL import Image, ImageTk
@@ -25,23 +25,23 @@ image_sats = Image.open('images/satellite.png')
 image_sats = ImageTk.PhotoImage(image_sats)
 label_image_sats = Label(window, image=image_sats,background=BLACK)
 label_image_sats.grid(row=0, column=0)
-label_sats = Label(window, text="00",fg=WHITE,background=BLACK,font=FONT)
-label_sats.grid(row=0, column=1)
+label_sats_text = Label(window, text="00",fg=WHITE,background=BLACK,font=FONT)
+label_sats_text.grid(row=0, column=1)
 
 ttk.Separator(window, orient=VERTICAL).grid(column=2, row=0, rowspan=1, sticky='ns', padx=8)
 
-label_pressure = Label(window, text="0000 hPa",fg=WHITE,background=BLACK,font=FONT)
-label_pressure.grid(row=0, column=3)
+label_pressure_text = Label(window, text="0000 hPa",fg=WHITE,background=BLACK,font=FONT)
+label_pressure_text.grid(row=0, column=3)
 
 ttk.Separator(window, orient=VERTICAL).grid(column=4, row=0, rowspan=1, sticky='ns', padx=8)
 
-label_time = Label(window, text="00:00:00",fg=WHITE,background=BLACK,font=FONT)
-label_time.grid(row=0, column=5)
+label_time_text = Label(window, text="00:00:00",fg=WHITE,background=BLACK,font=FONT)
+label_time_text.grid(row=0, column=5)
 
 ttk.Separator(window, orient=VERTICAL).grid(column=6, row=0, rowspan=1, sticky='ns', padx=8)
 
-label_batterie= Label(window, text="00%",fg=WHITE,background=BLACK,font=FONT)
-label_batterie.grid(row=0, column=8)
+label_batterie_text= Label(window, text="00%",fg=WHITE,background=BLACK,font=FONT)
+label_batterie_text.grid(row=0, column=8)
 image_batterie = Image.open('images/batterie.png')
 image_batterie = ImageTk.PhotoImage(image_batterie)
 label_image_batterie = Label(window, image=image_batterie,background=BLACK)
@@ -81,54 +81,80 @@ settings_button.grid(row=2, column=7,columnspan=2)
 
 
 
-data = data()
 
-def update_sat():
-    sats = data['sat']
-    label_sats.config(text=sats)
-    window.after(1000,update_sat)
 
-def update_press():
-    press = data['localQNH']
-    label_pressure.config(text=press)
-    window.after(1000,update_press)
+def update_data():
+
+    """ DATA DICT:
+
+        "time": 0,
+        "localQNH": 0,
+        "lat" : 0,
+        "long" : 0,
+        "speed": 0,
+        "altGPS": 0,
+        "sat":0,
+        "alt": 0
+    """
+
+    my_data = data()
+
+    # Get the latest data values
+    current_time = datetime.datetime.now()
+    current_time = current_time.strftime("%H:%M:%S")
+
+    altitude = my_data['alt']
+    speed = my_data['speed']
+    vertical_speed = vertical_speed(my_data['alt'])
+    latitude = my_data['lat']
+    longitude = my_data['lon']
+    satellites = my_data['sat']
+    localQNH = my_data['localQNH']
+
+
+    
+
+    #Time text update
+    label_time_text.configure(state='normal')
+    label_time_text.delete('1.0', 'end')
+    label_time_text.insert('end', str(current_time))
+    label_time_text.configure(state='disabled')
+
+    #Speed text update
+    label_speed_text.configure(state='normal')
+    label_speed_text.delete('1.0', 'end')
+    label_speed_text.insert('end', str(speed))
+    label_speed_text.configure(state='disabled')
+
+    #Satellites text update
+    label_sats_text.configure(state='normal')
+    label_sats_text.delete('1.0', 'end')
+    label_sats_text.insert('end', str(satellites))
+    label_sats_text.configure(state='disabled')
+
+
+    #Pressure (local QNH) text update
+    label_pressure_text.configure(state='normal')
+    label_pressure_text.delete('1.0', 'end')
+    label_pressure_text.insert('end', str(localQNH))
+    label_pressure_text.configure(state='disabled')
+
+    #Altitude text update
+    label_alt_text.configure(state='normal')
+    label_alt_text.delete('1.0', 'end')
+    label_alt_text.insert('end', str(altitude))
+    label_alt_text.configure(state='disabled')
+    
+    
+    #Schedule the next update
+    window.after(100, update_data)
+
+
 
 
 def update_bat():
     #TODO
     pass
-
-def update_time():
-    current_time = time.strftime("%H:%M:%S")
-    label_time.config(text=current_time)
-    window.after(1000,update_time)
-
-def update_alt():
-    alt = data['alt']
-    label_alt.config(text=alt)
-    window.after(1000,update_alt)
-
-def update_therm():
-    therm = vertical_speed(data['alt'])
-    label_therm.config(text=therm)
-    window.after(1,update_therm)
-
-def update_speed():
-    speed = data['speed']
-    label_speed.config(text=speed)
-    window.after(1000,update_therm)
-
-def update_alt():
-    alt = data['alt']
-    label_alt.config(text=alt)
-    window.after(1000,update_alt)
-
-update_sat()
-update_press()    
-update_time()
-update_alt()
-update_therm()
-update_speed()
 
 
 window.mainloop()

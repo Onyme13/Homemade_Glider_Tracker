@@ -80,55 +80,10 @@ settings_button = Button(window,image=image_settings,bg=BLACK)
 settings_button.grid(row=2, column=7,columnspan=2)
 
 
-
-data = data()
-
-def update_sat():
-    sats = data['sat']
-    label_sats.config(text=sats)
-    window.after(1000,update_sat)
-
-def update_press():
-    press = data['localQNH']
-    label_pressure.config(text=press)
-    window.after(1000,update_press)
-
-
-def update_bat():
-    #TODO
+def update_data():
+    data_dict = data()
+    #TODO update data 
     pass
-
-def update_time():
-    current_time = time.strftime("%H:%M:%S")
-    label_time.config(text=current_time)
-    window.after(1000,update_time)
-
-def update_alt():
-    alt = data['alt']
-    label_alt.config(text=alt)
-    window.after(1000,update_alt)
-
-def update_therm():
-    therm = vertical_speed(data['alt'])
-    label_therm.config(text=therm)
-    window.after(1,update_therm)
-
-def update_speed():
-    speed = data['speed']
-    label_speed.config(text=speed)
-    window.after(1000,update_therm)
-
-def update_alt():
-    alt = data['alt']
-    label_alt.config(text=alt)
-    window.after(1000,update_alt)
-
-update_sat()
-update_press()    
-update_time()
-update_alt()
-update_therm()
-update_speed()
 
 
 window.mainloop()

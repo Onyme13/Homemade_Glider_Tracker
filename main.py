@@ -125,7 +125,7 @@ def data():
         })
     #print serial data from Arduino
     #print(dataArray)
-    #print(returnDict)
+    print(returnDict)
     return returnDict
 
 #testing output data

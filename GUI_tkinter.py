@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk 
 import datetime
 from main import *
+import threading
 
 from PIL import Image, ImageTk
 
@@ -41,11 +42,11 @@ label_time_text.grid(row=0, column=5)
 ttk.Separator(window, orient=VERTICAL).grid(column=6, row=0, rowspan=1, sticky='ns', padx=8)
 
 label_batterie_text= Label(window, text="00%",fg=WHITE,background=BLACK,font=FONT)
-label_batterie_text.grid(row=0, column=8)
+label_batterie_text.grid(row=0, column=7)
 image_batterie = Image.open('images/batterie.png')
 image_batterie = ImageTk.PhotoImage(image_batterie)
 label_image_batterie = Label(window, image=image_batterie,background=BLACK)
-label_image_batterie.grid(row=0, column=9)
+label_image_batterie.grid(row=0, column=8)
 
 #Second row
 
@@ -100,14 +101,14 @@ def update_data():
     my_data = data()
 
     # Get the latest data values
-    current_time = datetime.datetime.now()
+    current_time = datetime.now()
     current_time = current_time.strftime("%H:%M:%S")
 
     altitude = my_data['alt']
     speed = my_data['speed']
-    vertical_speed = vertical_speed(my_data['alt'])
+    vert_speed = vertical_speed(my_data['alt'])
     latitude = my_data['lat']
-    longitude = my_data['lon']
+    longitude = my_data['long']
     satellites = my_data['sat']
     localQNH = my_data['localQNH']
 
@@ -115,39 +116,29 @@ def update_data():
     
 
     #Time text update
-    label_time_text.configure(state='normal')
-    label_time_text.delete('1.0', 'end')
-    label_time_text.insert('end', str(current_time))
-    label_time_text.configure(state='disabled')
+    label_time_text.configure(text=str(current_time))
 
+    
     #Speed text update
-    label_speed_text.configure(state='normal')
-    label_speed_text.delete('1.0', 'end')
-    label_speed_text.insert('end', str(speed))
-    label_speed_text.configure(state='disabled')
+    label_speed.configure(text=str(round(speed)) + ' km/h')
 
+
+    
     #Satellites text update
-    label_sats_text.configure(state='normal')
-    label_sats_text.delete('1.0', 'end')
-    label_sats_text.insert('end', str(satellites))
-    label_sats_text.configure(state='disabled')
+    label_sats_text.configure(text=str(round(satellites)))
 
 
     #Pressure (local QNH) text update
-    label_pressure_text.configure(state='normal')
-    label_pressure_text.delete('1.0', 'end')
-    label_pressure_text.insert('end', str(localQNH))
-    label_pressure_text.configure(state='disabled')
+    label_pressure_text.configure(text=str(round(localQNH)) + ' hPa')
 
     #Altitude text update
-    label_alt_text.configure(state='normal')
-    label_alt_text.delete('1.0', 'end')
-    label_alt_text.insert('end', str(altitude))
-    label_alt_text.configure(state='disabled')
+    label_alt.configure(text=str(round(altitude)) + ' m')
     
-    
+    #Verical speed text update
+    label_therm.configure(text=str(vert_speed) + ' m/s')    
+
     #Schedule the next update
-    window.after(100, update_data)
+    window.after(200, update_data)
 
 
 
@@ -156,5 +147,9 @@ def update_bat():
     #TODO
     pass
 
+thread_update_data = threading.Thread(target=update_data)
+thread_update_data.start()
 
+
+#update_data()
 window.mainloop()

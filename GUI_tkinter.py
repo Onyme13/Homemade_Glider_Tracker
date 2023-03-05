@@ -110,23 +110,16 @@ def update_data():
     latitude = my_data['lat']
     longitude = my_data['long']
     satellites = my_data['sat']
-    localQNH = my_data['localQNH']
-
-
-    
+    localQNH = my_data['localQNH']   
 
     #Time text update
     label_time_text.configure(text=str(current_time))
-
-    
+ 
     #Speed text update
     label_speed.configure(text=str(round(speed)) + ' km/h')
 
-
-    
     #Satellites text update
     label_sats_text.configure(text=str(round(satellites)))
-
 
     #Pressure (local QNH) text update
     label_pressure_text.configure(text=str(round(localQNH)) + ' hPa')
@@ -147,9 +140,9 @@ def update_bat():
     #TODO
     pass
 
-thread_update_data = threading.Thread(target=update_data)
-thread_update_data.start()
+#thread_update_data = threading.Thread(target=update_data)
+#thread_update_data.start()
 
 
-#update_data()
+update_data()
 window.mainloop()

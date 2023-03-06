@@ -1,7 +1,7 @@
 import serial
 from datetime import datetime
 
-#TODO transmit local QNH, transmit local time for data keeping
+
 
 #arduinoSerial = serial.Serial('COM4',9600)
 arduinoSerial = serial.Serial('COM4',115200)
@@ -56,6 +56,7 @@ def adapt_local_pressure(altGPS,alt):
         heightCalibrated = round((localQNH - SEALEVELPRESSURE) * HETCOPASCALMETERSOFAIR,1)
         calibrated=True
 
+#calculates vertical speed
 def vertical_speed(alt):
     global verticalSpeed
     global newAlt
@@ -74,7 +75,7 @@ def vertical_speed(alt):
 
     oldAlt=newAlt
 
-    return verticalSpeed #TODO Return something else 
+    return verticalSpeed  
 
 
 #main function that processes data
@@ -132,5 +133,4 @@ def data():
 
 #testing output data
 #while True:
-#    pass
 #    data()

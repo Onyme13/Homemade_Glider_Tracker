@@ -2,8 +2,7 @@ from tkinter import *
 from tkinter import ttk 
 import datetime
 from main import *
-import threading
-
+import tkintermapview
 from PIL import Image, ImageTk
 
 BLACK = '#000000'
@@ -15,7 +14,7 @@ window = Tk()
 
 window.title('GPS')
 window.minsize(width=320,height=480)
-window.maxsize(width=320,height=480)
+#window.maxsize(width=320,height=480)
 
 window.geometry("320x480")
 window.config(background=BLACK)
@@ -50,35 +49,40 @@ label_image_batterie.grid(row=0, column=8)
 
 #Second row
 
-
-
-
+map_widget = tkintermapview.TkinterMapView(window, width=320, height=370)
+map_widget.grid(row=2,rowspan=6,column=0,columnspan=9)
+map_widget.set_position(46.818188, 8.227512)  # Switzerland Center
+map_widget.set_zoom(15)
 
 
 
 #Third row
 label_alt_text = Label(window, text="ALT",fg=WHITE,background=BLACK,font=FONT)
-label_alt_text.grid(row=1, column=0,columnspan=3)
+label_alt_text.grid(row=8, column=0,columnspan=3)
 label_alt = Label(window, text="0000 m",fg=WHITE,background=BLACK,font=FONT)
-label_alt.grid(row=2, column=0,columnspan=3)
+label_alt.grid(row=9, column=0,columnspan=3)
 
 
 
 label_therm_text = Label(window, text="THERM.",fg=WHITE,background=BLACK,font=FONT)
-label_therm_text.grid(row=1, column=2,columnspan=3)
+label_therm_text.grid(row=8, column=2,columnspan=3)
 label_therm = Label(window, text="00 m/s",fg=WHITE,background=BLACK,font=FONT)
-label_therm.grid(row=2, column=2,columnspan=3)
+label_therm.grid(row=9, column=2,columnspan=3)
 
 
 
 label_speed_text = Label(window, text="SPEED",fg=WHITE,background=BLACK,font=FONT)
-label_speed_text.grid(row=1, column=4,columnspan=2)
+label_speed_text.grid(row=8, column=4,columnspan=2)
 label_speed = Label(window, text="000 km/h",fg=WHITE,background=BLACK,font=FONT)
-label_speed.grid(row=2, column=4,columnspan=2)
+label_speed.grid(row=9, column=4,columnspan=2)
 
 image_settings = PhotoImage(file="images/settings.png")
 settings_button = Button(window,image=image_settings,bg=BLACK)
-settings_button.grid(row=2, column=7,columnspan=2)
+settings_button.grid(row=8, rowspan=2 ,column=7,columnspan=1)
+
+
+def update_position(lat,long):
+    marker = map_widget.set_position(lat, long, marker=True,)
 
 
 
@@ -130,8 +134,11 @@ def update_data():
     #Verical speed text update
     label_therm.configure(text=str(vert_speed) + ' m/s')    
 
-    #Schedule the next update
-    window.after(200, update_data)
+
+    #Location update
+
+
+    window.after(200, update_data) #Initial value is 200
 
 
 

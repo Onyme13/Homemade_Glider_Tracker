@@ -6,20 +6,17 @@ système métriques
 
 TODO:
 -peut-être changer la sortie baud de 9600 à 115200
--effacer les commentaires de l'ancienne version vma430
 -commenter le code
 */
 
 #include <SPI.h>
 #include <Adafruit_Sensor.h>
 #include "Adafruit_BMP3XX.h"
-//#include <VMA430_GPS.h>
 #include <TinyGPSPlus.h>   
 #include <SoftwareSerial.h>
 
 
 SoftwareSerial ss(3, 2); 
-//VMA430_GPS gps(&ss);
 TinyGPSPlus gps;
 Adafruit_BMP3XX bmp;
 
@@ -35,24 +32,11 @@ Adafruit_BMP3XX bmp;
 
 
 
-//void gps_location(){
-//  if (gps.getUBX_packet()){
-//    gps.parse_ubx_data();
-//    
-//    Serial.print(",");
-//    Serial.print(gps.location.latitude, 8); 
-//    Serial.print(",");
-//    Serial.print(gps.location.longitude, 8);
-//  }
-//}
-
-
-
 void setup() {
-  Serial.begin(9600);
-  ss.begin(9600);
-  //gps.begin(9600); 
-  //gps.setUBXNav();
+  //Serial.begin(9600);
+  //ss.begin(9600);
+  Serial.begin(115200);
+  ss.begin(115200);
 
   while(!Serial){
   }

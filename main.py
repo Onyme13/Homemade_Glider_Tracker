@@ -3,7 +3,9 @@ from datetime import datetime
 
 #TODO transmit local QNH, transmit local time for data keeping
 
-arduinoSerial = serial.Serial('COM4',9600)
+#arduinoSerial = serial.Serial('COM4',9600)
+arduinoSerial = serial.Serial('COM4',115200)
+
 
 SEALEVELPRESSURE = 1013.25 
 METERSOFAIRHETCOPASCAL = 0.12677457000000025

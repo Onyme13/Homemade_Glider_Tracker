@@ -9,6 +9,9 @@ BLACK = '#000000'
 WHITE = '#FFFFFF'
 FONT = ('Regular',13)
 
+position_list = []
+
+
 
 window = Tk()
 
@@ -48,6 +51,7 @@ label_image_batterie = Label(window, image=image_batterie,background=BLACK)
 label_image_batterie.grid(row=0, column=8)
 
 #Second row
+glider = ImageTk.PhotoImage(Image.open('images/glider.png').resize((25,25)))
 
 map_widget = tkintermapview.TkinterMapView(window, width=320, height=370)
 map_widget.grid(row=2,rowspan=6,column=0,columnspan=9)
@@ -82,7 +86,19 @@ settings_button.grid(row=8, rowspan=2 ,column=7,columnspan=1)
 
 
 def update_position(lat,long):
-    marker = map_widget.set_position(lat, long, marker=True,)
+    global position_list
+
+    map_widget.set_position(lat, long, marker=True, icon=glider)
+
+    while lat != 0 and long != 0:
+        position = lat,long
+        position_list.append(position)
+    position_list = tuple(position_list)
+    
+    while len(position_list) != 0:
+        path = map_widget.set_path(position_list)
+    
+    
 
 
 
@@ -136,7 +152,7 @@ def update_data():
 
 
     #Location update
-
+    update_position(latitude,longitude) #   update_position(46.818188,8.227512)
 
     window.after(200, update_data) #Initial value is 200
 

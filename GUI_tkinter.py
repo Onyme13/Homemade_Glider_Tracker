@@ -4,13 +4,14 @@ import datetime
 from main import *
 import tkintermapview
 from PIL import Image, ImageTk
+import math
+from memory_profiler import profile
 
 BLACK = '#000000'
 WHITE = '#FFFFFF'
 FONT = ('Regular',13)
 
 position_list = []
-
 
 
 window = Tk()
@@ -51,7 +52,6 @@ label_image_batterie = Label(window, image=image_batterie,background=BLACK)
 label_image_batterie.grid(row=0, column=8)
 
 #Second row
-glider = ImageTk.PhotoImage(Image.open('images/glider.png').resize((25,25)))
 
 map_widget = tkintermapview.TkinterMapView(window, width=320, height=370)
 map_widget.grid(row=2,rowspan=6,column=0,columnspan=9)
@@ -84,26 +84,55 @@ image_settings = PhotoImage(file="images/settings.png")
 settings_button = Button(window,image=image_settings,bg=BLACK)
 settings_button.grid(row=8, rowspan=2 ,column=7,columnspan=1)
 
+#Function that define the oritentation of the glider (360°)
+def def_orient(list_position):
+
+    if len(list_position) > 0:
+        old_lat = list_position[-2][0]
+        old_long = list_position[-2][1]
+
+        new_lat = list_position[-1][0]
+        new_long = list_position[-1][1]
+
+        tan_calc = (new_lat-old_lat)/(new_long-old_long)
+
+        if tan_calc < 0:
+            tan_calc *= -1
+
+        orientation = math.tan((tan_calc))
+        
+        return orientation
+    else:
+        return 0
+    
+
 
 def update_position(lat,long):
-    global position_list
 
-    map_widget.set_position(lat, long, marker=True, icon=glider)
+    #Append latitude and longitude in tuple that stores the position
+    global position_list
 
     while lat != 0 and long != 0:
         position = lat,long
         position_list.append(position)
     position_list = tuple(position_list)
-    
+
+    #Only add set path and marker from the new position only if the plane is moving
     while len(position_list) != 0:
         path = map_widget.set_path(position_list)
+        #path.add_position(lat,long)
     
+    #Change glider icon orientation 
+    glider = Image.open('images/glider.png').resize((25,25)).rotate(def_orient(position_list))
+    glider = ImageTk.PhotoImage(glider)
+
+    map_widget.set_position(lat, long, marker=True, icon=glider)
     
 
 
 
 
-
+@profile
 def update_data():
 
     """ DATA DICT:
@@ -133,28 +162,28 @@ def update_data():
     localQNH = my_data['localQNH']   
 
     #Time text update
-    label_time_text.configure(text=str(current_time))
+    label_time_text.config(text=str(current_time))
  
     #Speed text update
-    label_speed.configure(text=str(round(speed)) + ' km/h')
+    label_speed.config(text=str(round(speed)) + ' km/h')
 
     #Satellites text update
-    label_sats_text.configure(text=str(round(satellites)))
+    label_sats_text.config(text=str(round(satellites)))
 
     #Pressure (local QNH) text update
-    label_pressure_text.configure(text=str(round(localQNH)) + ' hPa')
+    label_pressure_text.config(text=str(round(localQNH)) + ' hPa')
 
     #Altitude text update
-    label_alt.configure(text=str(round(altitude)) + ' m')
+    label_alt.config(text=str(round(altitude)) + ' m')
     
     #Verical speed text update
-    label_therm.configure(text=str(vert_speed) + ' m/s')    
+    label_therm.config(text=str(vert_speed) + ' m/s')    
 
 
     #Location update
     update_position(latitude,longitude) #   update_position(46.818188,8.227512)
-
-    window.after(200, update_data) #Initial value is 200
+    window.destroy()
+    window.after(1000, update_data) #Initial value is 200
 
 
 
@@ -163,9 +192,9 @@ def update_bat():
     #TODO
     pass
 
+
 #thread_update_data = threading.Thread(target=update_data)
 #thread_update_data.start()
-
 
 update_data()
 window.mainloop()

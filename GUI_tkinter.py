@@ -6,6 +6,7 @@ import tkintermapview
 from PIL import Image, ImageTk
 import math
 from memory_profiler import profile
+import threading
 
 BLACK = '#000000'
 WHITE = '#FFFFFF'
@@ -84,21 +85,25 @@ image_settings = PhotoImage(file="images/settings.png")
 settings_button = Button(window,image=image_settings,bg=BLACK)
 settings_button.grid(row=8, rowspan=2 ,column=7,columnspan=1)
 
+
+
 #Function that define the oritentation of the glider (360°)
 def def_orient(list_position):
 
-    if len(list_position) > 0:
+    if len(list_position) > 2:
         old_lat = list_position[-2][0]
         old_long = list_position[-2][1]
 
         new_lat = list_position[-1][0]
         new_long = list_position[-1][1]
 
-        tan_calc = (new_lat-old_lat)/(new_long-old_long)
-
-        if tan_calc < 0:
-            tan_calc *= -1
-
+        if new_long-old_long != 0:
+            tan_calc = (new_lat-old_lat)/(new_long-old_long)
+            if tan_calc < 0:
+                tan_calc *= -1
+        else:
+            tan_calc= 0
+        
         orientation = math.tan((tan_calc))
         
         return orientation
@@ -112,14 +117,13 @@ def update_position(lat,long):
     #Append latitude and longitude in tuple that stores the position
     global position_list
 
-    while lat != 0 and long != 0:
+    if lat != 0 and long != 0:
         position = lat,long
         position_list.append(position)
-    position_list = tuple(position_list)
 
     #Only add set path and marker from the new position only if the plane is moving
-    while len(position_list) != 0:
-        path = map_widget.set_path(position_list)
+    if len(position_list) > 2:
+        path = map_widget.set_path(position_list,color="#F0F0F0")
         #path.add_position(lat,long)
     
     #Change glider icon orientation 
@@ -132,7 +136,6 @@ def update_position(lat,long):
 
 
 
-@profile
 def update_data():
 
     """ DATA DICT:
@@ -181,9 +184,8 @@ def update_data():
 
 
     #Location update
-    update_position(latitude,longitude) #   update_position(46.818188,8.227512)
-    window.destroy()
-    window.after(1000, update_data) #Initial value is 200
+    update_position(46.818188,8.227512)
+    window.after(200, update_data) #Initial value is 200
 
 
 

@@ -33,10 +33,10 @@ Adafruit_BMP3XX bmp;
 
 
 void setup() {
-  //Serial.begin(9600);
-  //ss.begin(9600);
-  Serial.begin(115200);
-  ss.begin(115200);
+  Serial.begin(9600);
+  ss.begin(9600);
+  //Serial.begin(115200);
+  //ss.begin(115200);
 
   while(!Serial){
   }

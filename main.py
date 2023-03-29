@@ -3,8 +3,8 @@ from datetime import datetime
 
 
 
-#arduinoSerial = serial.Serial('COM4',9600)
-arduinoSerial = serial.Serial('COM4',115200)
+arduinoSerial = serial.Serial('COM4',9600)
+#arduinoSerial = serial.Serial('COM4',115200)
 
 
 
@@ -31,7 +31,7 @@ altGPSArray = [] #Array of the altitude data from the GPS
 localQNH = 0 #local QNH difference with the sea level pressure
 heightCalibrated = 0
 calibrated = False #boolean for the calibration of the local QNH
-
+altBucket = []
 
 
 def adapt_local_pressure(altGPS,alt):
@@ -56,6 +56,23 @@ def adapt_local_pressure(altGPS,alt):
         localQNH = SEALEVELPRESSURE + ((sum(altGPSArray)/20)-alt) * METERSOFAIRHETCOPASCAL
         heightCalibrated = round((localQNH - SEALEVELPRESSURE) * HETCOPASCALMETERSOFAIR,1)
         calibrated=True
+
+#test of new function that uses threading, every second call this function.
+def vert_speed(alt):
+    global altBucket
+
+    while len(altBucket) < 2:
+        altBucket.append(alt)
+
+    
+    verticalSpeed = round(altBucket[1]-altBucket[0],1) 
+
+    altBucket.pop(altBucket[0])
+
+    if verticalSpeed == -0.0:
+        verticalSpeed = 0.0
+
+    return verticalSpeed
 
 #calculates vertical speed
 def vertical_speed(alt):

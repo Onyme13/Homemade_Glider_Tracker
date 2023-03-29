@@ -7,6 +7,7 @@ from PIL import Image, ImageTk
 import math
 from memory_profiler import profile
 import threading
+import os
 
 BLACK = '#000000'
 WHITE = '#FFFFFF'
@@ -54,7 +55,10 @@ label_image_batterie.grid(row=0, column=8)
 
 #Second row
 
-map_widget = tkintermapview.TkinterMapView(window, width=320, height=370)
+script_directory = os.path.dirname(os.path.abspath(__file__))
+database_path = os.path.join(script_directory, "OACI_Suisse_VV_2022.db") 
+
+map_widget = tkintermapview.TkinterMapView(window, width=320, height=370,use_database_only=True, database_path=database_path)
 map_widget.grid(row=2,rowspan=6,column=0,columnspan=9)
 map_widget.set_position(46.818188, 8.227512)  # Switzerland Center
 map_widget.set_zoom(15)
@@ -184,7 +188,10 @@ def update_data():
 
 
     #Location update
-    update_position(46.818188,8.227512)
+    if latitude!= 0 and longitude!= 0:
+        update_position(latitude,longitude)
+    else:
+        update_position(46.818188, 8.227512)  # Switzerland Center
     window.after(200, update_data) #Initial value is 200
 
 

@@ -150,7 +150,8 @@ def update_data():
         "long" : 0,
         "speed": 0,
         "altGPS": 0,
-        "sat":0,
+        "sat": 0,
+        "vert": 0,
         "alt": 0
     """
 
@@ -162,7 +163,7 @@ def update_data():
 
     altitude = my_data['alt']
     speed = my_data['speed']
-    vert_speed = vertical_speed(my_data['alt'])
+    vert_speed = my_data['vert'] #vertical_speed(my_data['alt'])
     latitude = my_data['lat']
     longitude = my_data['long']
     satellites = my_data['sat']

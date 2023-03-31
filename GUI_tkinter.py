@@ -5,7 +5,6 @@ from main import *
 import tkintermapview
 from PIL import Image, ImageTk
 import math
-from memory_profiler import profile
 import threading
 import os
 

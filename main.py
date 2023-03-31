@@ -21,6 +21,7 @@ returnDict = {
         "speed": 0,
         "altGPS": 0,
         "sat":0,
+        "vert":0,
         "alt": 0
     }    
 
@@ -58,7 +59,7 @@ def adapt_local_pressure(altGPS,alt):
         calibrated=True
 
 #test of new function that uses threading, every second call this function.
-def vert_speed(alt):
+def vert_speed_test(alt):
     global altBucket
 
     while len(altBucket) < 2:
@@ -128,6 +129,8 @@ def data():
         altitudeGPS = float(dataArray[3])
         satellites = float(dataArray[4])
         altitude = float(dataArray[-1])
+
+        vert_speed = vertical_speed(altitude)
         
         if calibrated: #If QNH is calibrated, adjust the height.
             altitude += heightCalibrated
@@ -142,6 +145,7 @@ def data():
             "speed": speed,
             "altGPS": altitudeGPS,
             "sat":satellites,
+            "vert": vert_speed,
             "alt": altitude
         })
     #print serial data from Arduino

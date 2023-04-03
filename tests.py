@@ -13,7 +13,7 @@ database_path = os.path.join(script_directory, "MAP_OSM.db")
 
 # create map widget and only use the tiles from the database, not the online server (use_database_only=True)
 map_widget = TkinterMapView(root_tk, width=1000, height=700, corner_radius=0, use_database_only=True,
-                            max_zoom=17, database_path=database_path)
+                            max_zoom=15, database_path=database_path)
 map_widget.pack(fill="both", expand=True)
 map_widget.set_position(46.818188, 8.227512)  # Switzerland Center
 map_widget.set_zoom(15)

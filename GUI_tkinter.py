@@ -2,10 +2,10 @@ from tkinter import *
 from tkinter import ttk 
 import datetime
 from main import *
+from positions_functions import *
 import tkintermapview
 from PIL import Image, ImageTk
 import math
-from memory_profiler import profile
 import threading
 import os
 
@@ -56,11 +56,11 @@ label_image_batterie.grid(row=0, column=8)
 #Second row
 
 script_directory = os.path.dirname(os.path.abspath(__file__))
-database_path = os.path.join(script_directory, "OACI_Suisse_VV_2022.db") 
+database_path = os.path.join(script_directory, "data\OACI_Suisse_VV_2022.db") 
 
 map_widget = tkintermapview.TkinterMapView(window, width=320, height=370,use_database_only=True, database_path=database_path)
 map_widget.grid(row=2,rowspan=6,column=0,columnspan=9)
-map_widget.set_position(46.818188, 8.227512)  # Switzerland Center
+map_widget.set_position(read_last_positon())  #  If no data is available, set the position to the last known position for preloading of the map
 map_widget.set_zoom(15)
 
 
@@ -91,39 +91,17 @@ settings_button.grid(row=8, rowspan=2 ,column=7,columnspan=1)
 
 
 
-#Function that define the oritentation of the glider (360°)
-def def_orient(list_position):
-
-    if len(list_position) > 2:
-        old_lat = list_position[-2][0]
-        old_long = list_position[-2][1]
-
-        new_lat = list_position[-1][0]
-        new_long = list_position[-1][1]
-
-        if new_long-old_long != 0:
-            tan_calc = (new_lat-old_lat)/(new_long-old_long)
-            if tan_calc < 0:
-                tan_calc *= -1
-        else:
-            tan_calc= 0
-        
-        orientation = math.tan((tan_calc))
-        
-        return orientation
-    else:
-        return 0
-    
 
 
 def update_position(lat,long):
 
-    #Append latitude and longitude in tuple that stores the position
     global position_list
 
+    #Append latitude and longitude in tuple that stores the position
     if lat != 0 and long != 0:
         position = lat,long
         position_list.append(position)
+    
 
     #Only add set path and marker from the new position only if the plane is moving
     if len(position_list) > 2:
@@ -190,9 +168,10 @@ def update_data():
 
     #Location update
     if latitude!= 0 and longitude!= 0:
-        update_position(latitude,longitude)
+        update_position(latitude,longitude) #update position for UI
+        write_last_positon(latitude,longitude) #write the last known position to a file 
     else:
-        update_position(46.818188, 8.227512)  # Switzerland Center
+        update_position(read_last_positon())  # If no data is available, set the position to the last known position for preloading of the map
     window.after(200, update_data) #Initial value is 200
 
 

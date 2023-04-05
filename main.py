@@ -3,7 +3,8 @@ from datetime import datetime
 
 
 
-arduinoSerial = serial.Serial('COM4',9600)
+#arduinoSerial = serial.Serial('COM4',9600)
+arduinoSerial = serial.Serial('COM3',9600)
 #arduinoSerial = serial.Serial('COM4',115200)
 
 
@@ -112,13 +113,18 @@ def data():
     
     #If lenght of dataArray is only one, this means the only output is barometric height
     if len(dataArray) == 1:
+
         altitude = float(dataArray[0])
+        vert_speed = vertical_speed(altitude)
         #altitude = float(dataArray[0])
         if calibrated: #If QNH is calibrated, adjust the height.
             altitude += heightCalibrated
-            returnDict.update({'localQNH':localQNH})
+            returnDict.update({'localQNH':localQNH,})
 
-        returnDict.update({"alt":altitude})
+        returnDict.update({
+            "vert": vert_speed,
+            "alt":altitude
+            })
         
     #dataArray[latitude, longitude, speed, altitude of GPS, altitude barometric] (metric system)
     if len(dataArray) >= 5:

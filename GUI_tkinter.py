@@ -56,11 +56,12 @@ label_image_batterie.grid(row=0, column=8)
 #Second row
 
 script_directory = os.path.dirname(os.path.abspath(__file__))
-database_path = os.path.join(script_directory, "data\OACI_Suisse_VV_2022.db") 
+database_path = os.path.join(script_directory, "data\MAP_OSM.db") 
 
 map_widget = tkintermapview.TkinterMapView(window, width=320, height=370,use_database_only=True, database_path=database_path)
 map_widget.grid(row=2,rowspan=6,column=0,columnspan=9)
-map_widget.set_position(read_last_positon())  #  If no data is available, set the position to the last known position for preloading of the map
+x, y = read_last_positon()
+map_widget.set_position(x,y)  #  If no data is available, set the position to the last known position for preloading of the map
 map_widget.set_zoom(15)
 
 
@@ -112,6 +113,9 @@ def update_position(lat,long):
     glider = Image.open('images/glider.png').resize((25,25)).rotate(def_orient(position_list))
     glider = ImageTk.PhotoImage(glider)
 
+    #map_widget.delete_all_marker()
+    map_widget.canvas_marker_list = map_widget.canvas_marker_list[:-2] #only keep the last two markers for clarity
+
     map_widget.set_position(lat, long, marker=True, icon=glider)
     
 
@@ -157,7 +161,7 @@ def update_data():
     label_sats_text.config(text=str(round(satellites)))
 
     #Pressure (local QNH) text update
-    label_pressure_text.config(text=str(round(localQNH)) + ' hPa')
+    label_pressure_text.config(text=str(round(localQNH)) + 'hPa')
 
     #Altitude text update
     label_alt.config(text=str(round(altitude)) + ' m')
@@ -171,7 +175,8 @@ def update_data():
         update_position(latitude,longitude) #update position for UI
         write_last_positon(latitude,longitude) #write the last known position to a file 
     else:
-        update_position(read_last_positon())  # If no data is available, set the position to the last known position for preloading of the map
+        x, y = read_last_positon()
+        update_position(x,y)  # If no data is available, set the position to the last known position for preloading of the map
     window.after(200, update_data) #Initial value is 200
 
 

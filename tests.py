@@ -9,7 +9,7 @@ root_tk.title("map_view_simple_example.py")
 
 # path for the database to use
 script_directory = os.path.dirname(os.path.abspath(__file__))
-database_path = os.path.join(script_directory, "MAP_OSM.db")
+database_path = os.path.join(script_directory, "data\MAP_OSM.db")
 
 # create map widget and only use the tiles from the database, not the online server (use_database_only=True)
 map_widget = TkinterMapView(root_tk, width=1000, height=700, corner_radius=0, use_database_only=True,

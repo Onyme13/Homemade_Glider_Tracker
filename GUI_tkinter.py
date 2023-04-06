@@ -5,7 +5,6 @@ from main import *
 from positions_functions import *
 import tkintermapview
 from PIL import Image, ImageTk
-import math
 import threading
 import os
 
@@ -56,7 +55,7 @@ label_image_batterie.grid(row=0, column=8)
 #Second row
 
 script_directory = os.path.dirname(os.path.abspath(__file__))
-database_path = os.path.join(script_directory, "data\OACI_Suisse_VV_2022.db") 
+database_path = os.path.join(script_directory, "data\MAP_OSM.db") 
 
 map_widget = tkintermapview.TkinterMapView(window, width=320, height=370,use_database_only=True, database_path=database_path)
 map_widget.grid(row=2,rowspan=6,column=0,columnspan=9)

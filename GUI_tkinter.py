@@ -61,7 +61,7 @@ map_widget = tkintermapview.TkinterMapView(window, width=320, height=370,use_dat
 map_widget.grid(row=2,rowspan=6,column=0,columnspan=9)
 x, y = read_last_positon()
 map_widget.set_position(x,y)  #  If no data is available, set the position to the last known position for preloading of the map
-map_widget.set_zoom(15)
+map_widget.set_zoom(7)
 
 
 
@@ -105,7 +105,7 @@ def update_position(lat,long):
 
     #Only add set path and marker from the new position only if the plane is moving
     if len(position_list) > 2:
-        path = map_widget.set_path(position_list,color="#F0F0F0")
+        path = map_widget.set_path(position_list,color="#F0F0F0",width=2)
         #path.add_position(lat,long)
     
     #Change glider icon orientation 

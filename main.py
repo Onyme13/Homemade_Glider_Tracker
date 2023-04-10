@@ -3,8 +3,8 @@ from datetime import datetime
 
 
 
-#arduinoSerial = serial.Serial('COM4',9600)
-arduinoSerial = serial.Serial('COM3',9600)
+arduinoSerial = serial.Serial('COM4',9600)
+#arduinoSerial = serial.Serial('COM3',9600)
 #arduinoSerial = serial.Serial('COM4',115200)
 
 

@@ -8,6 +8,7 @@ from PIL import Image, ImageTk
 import threading
 import os
 
+
 BLACK = '#000000'
 WHITE = '#FFFFFF'
 FONT = ('Regular',13)
@@ -55,13 +56,15 @@ label_image_batterie.grid(row=0, column=8)
 #Second row
 
 script_directory = os.path.dirname(os.path.abspath(__file__))
-database_path = os.path.join(script_directory, "data\MAP_OSM.db") 
+database_path = os.path.join(script_directory, "data/MAP_GREY.db") 
 
 map_widget = tkintermapview.TkinterMapView(window, width=320, height=370,use_database_only=True, database_path=database_path)
 map_widget.grid(row=2,rowspan=6,column=0,columnspan=9)
 x, y = read_last_positon()
 map_widget.set_position(x,y)  #  If no data is available, set the position to the last known position for preloading of the map
-map_widget.set_zoom(7)
+map_widget.set_zoom(12) 
+map_widget.max_zoom = 14
+map_widget.min_zoom = 9
 
 
 
@@ -123,6 +126,8 @@ def update_position(lat,long):
 
 def update_data():
 
+    print(map_widget.zoom)
+
     """ DATA DICT:
 
         "time": 0,
@@ -176,7 +181,9 @@ def update_data():
     else:
         x, y = read_last_positon()
         update_position(x,y)  # If no data is available, set the position to the last known position for preloading of the map
-    window.after(200, update_data) #Initial value is 200
+    window.after(500, update_data) #Initial value is 200
+
+    #time.sleep(0.25) #Initial value is 0.25
 
 
 

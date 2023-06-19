@@ -7,7 +7,7 @@ import sqlite3
 zoom_array =[]
 
 #name of the database file
-db_name = "MAP_OSM"
+db_name = "MAP_GREY"
 db_name = db_name + ".db"
 
 #create database 
@@ -19,15 +19,12 @@ conn.execute("CREATE TABLE IF NOT EXISTS server (server VARCHAR(255), max_zoom I
 conn.execute("CREATE TABLE IF NOT EXISTS tiles (zoom INTEGER, x INTEGER, y INTEGER, server VARCHAR(255) DEFAULT 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png' , tile_image BLOB);") 
 
 # file path of the tiles
-dir_path = 'C:/Users/jocor/Desktop/tiles_OSM' 
+dir_path = 'C:/Users/jocor/Desktop/tiles_Grey' 
 
 for zoom in os.listdir(dir_path):
     zoom_array.append(int(zoom))
-    progess_bar =""
     print("Processing zoom level: "+ str(zoom))
     for x in os.listdir(os.path.join(dir_path, zoom)):
-        progess_bar += "-"
-        print(progess_bar)
         for y in os.listdir(os.path.join(dir_path, zoom, x)):
            
             tile_path = os.path.join(dir_path, zoom, x, y)
@@ -38,6 +35,7 @@ for zoom in os.listdir(dir_path):
                 tile_blob = file.read()
 
             conn.execute("""INSERT INTO tiles (zoom, x, y, tile_image) VALUES (?,?,?,?);""",(zoom, x, y, tile_blob))
+    print("Zoom level: "+ str(zoom) + " done \n")
 
 zoom = max(zoom_array)
 conn.execute("INSERT INTO server (server, max_zoom) VALUES (?,?);",('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',zoom))

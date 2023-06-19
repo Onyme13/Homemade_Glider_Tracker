@@ -29,12 +29,12 @@ def def_orient(list_position):
 
 #function that stores the last known postion in CSV file
 def write_last_positon(lat,long):
-    with open("data\last_pos.csv", "w") as f:
+    with open("data/last_pos.csv", "w") as f:
         f.write(str(lat)+","+str(long))
 
 #function that reads the last known postion from the CSV file from the write_last_positon function
 def read_last_positon():
-    with open("data\last_pos.csv", "r") as f:
+    with open("data/last_pos.csv", "r") as f:
         lat,long = f.readline().split(",")
         return float(lat),float(long)
     

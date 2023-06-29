@@ -3,7 +3,7 @@ from tkinter import ttk
 import datetime
 from main import *
 from positions_functions import *
-import tkintermapview
+import tkintermapviewglider as tkintermapview
 from PIL import Image, ImageTk
 import threading
 import os

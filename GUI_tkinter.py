@@ -55,10 +55,13 @@ label_image_batterie.grid(row=0, column=8)
 
 #Second row
 
-script_directory = os.path.dirname(os.path.abspath(__file__))
-database_path = os.path.join(script_directory, "data/MAP_GREY.db") 
+#script_directory = os.path.dirname(os.path.abspath(__file__))
+#database_path = os.path.join(script_directory, "data/MAP_GREY.db") 
 
-map_widget = tkintermapview.TkinterMapView(window, width=320, height=370,use_database_only=True, database_path=database_path)
+map_widget = tkintermapview.TkinterMapView(window, width=320, height=370,use_database_only=False, database_path=None)
+map_widget.set_tile_server("http://127.0.0.1:5000/tiles/{z}/{x}/{y}.png", max_zoom=22)
+
+#map_widget = tkintermapview.TkinterMapView(window, width=320, height=370,use_database_only=True, database_path=database_path)
 map_widget.grid(row=2,rowspan=6,column=0,columnspan=9)
 x, y = read_last_positon()
 map_widget.set_position(x,y)  #  If no data is available, set the position to the last known position for preloading of the map

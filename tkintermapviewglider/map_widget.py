@@ -408,8 +408,7 @@ class TkinterMapView(tkinter.Frame):
         self.canvas.lift("corner")
         self.canvas.lift("button")
 
-#MODIFIED
-    CACHE_LIMIT = 15_000
+    CACHE_LIMIT = 5_000 # 10_000 images = 80 MB RAM-usage
 
     def pre_cache(self):
         """Single-threaded pre-cache tile images in the area of self.pre_cache_position."""

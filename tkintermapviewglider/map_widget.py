@@ -141,9 +141,9 @@ class TkinterMapView(tkinter.Frame):
         self.image_load_queue_results: List[tuple] = []  # result: ((zoom, x, y), canvas_tile_object, photo_image)
         self.after(10, self.update_canvas_tile_images)
         self.image_load_thread_pool: List[threading.Thread] = []
-
+        # MODIFIED 
         # add background threads which load tile images from self.image_load_queue_tasks
-        for i in range(25):
+        for i in range(15):
             image_load_thread = threading.Thread(daemon=True, target=self.load_images_background)
             image_load_thread.start()
             self.image_load_thread_pool.append(image_load_thread)

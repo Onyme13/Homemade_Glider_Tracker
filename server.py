@@ -1,13 +1,16 @@
-import flask
+from flask import Flask, send_file, abort
+import os
 
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 
 @app.route('/tiles/<int:z>/<int:x>/<int:y>.png')
 def get_tile(z,x,y):
     filename = f'tiles_Grey/{z}/{x}/{y}.png'
-    print(x,y,z)
-    return flask.send_file(filename, mimetype='image/png')
+    if os.path.exists(filename):
+        return send_file(filename, mimetype='image/png')
+    else:
+        abort(404)
 
 if __name__ == '__main__':
     app.run(debug=True)

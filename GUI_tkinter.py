@@ -7,11 +7,10 @@ import tkintermapviewglider as tkintermapview
 from PIL import Image, ImageTk
 import threading
 import os
+from constants import *
 
 
-BLACK = '#000000'
-WHITE = '#FFFFFF'
-FONT = ('Regular',13)
+
 
 position_list = []
 

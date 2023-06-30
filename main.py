@@ -2,12 +2,11 @@ import serial
 from datetime import datetime
 import itertools
 import time
+from constants import *
+
 
 arduinoSerial = serial.Serial('COM4', 9600)
 
-SEALEVELPRESSURE = 1013.25
-METERSOFAIRHETCOPASCAL = 0.12677457000000025
-HETCOPASCALMETERSOFAIR = 7.8880172892718
 
 previous_altitude = 0
 previous_time = 0
@@ -22,7 +21,6 @@ def adapt_local_pressure(altGPS, alt):
     global heightCalibrated
     global calibrated
 
-    altitude_proximity_counter = 0
 
     altGPSArray.append(altGPS)
 

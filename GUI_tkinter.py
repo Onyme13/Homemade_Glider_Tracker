@@ -98,21 +98,41 @@ settings_button.grid(row=8, rowspan=2 ,column=7,columnspan=1)
 
 
 
-def update_position(lat,long):
+def update_position(lat,long,speed):
 
     global position_list
 
-    #Append latitude and longitude in tuple that stores the position
-    if lat != 0 and long != 0:
-        position = lat,long
-        position_list.append(position)
-    
+    #Only add the new position to the list if the plane is moving
+    if speed > 50:
 
-    #Only add set path and marker from the new position only if the plane is moving
-    if len(position_list) > 2:
-        path = map_widget.set_path(position_list,color="#F0F0F0",width=2)
-        #path.add_position(lat,long)
-    
+        if len(position_list) < 2:
+            position_list.append([lat,long])
+
+        if len(position_list) >= 2:
+            current_position = position_list[-1]
+            prevous_position = position_list[-2]
+
+            distance = calculate_distance(current_position, prevous_position)
+
+            threshold = 0.0005 #If the distance between the two points is less than this, don't add the new point to the list
+
+            if distance > threshold:
+                position_list.append([lat,long])
+                update_path(position_list)
+
+    def calculate_distance(current_position, prevous_position):
+        lat1, lon1 = current_position
+        lat2, lon2 = prevous_position
+
+        earth_radius = 6371  # Earth's radius in kilometers
+        dlat = math.radians(lat2 - lat1)
+        dlong = math.radians(lon2 - lon1)
+        a = math.sin(dlat / 2) ** 2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlong / 2) ** 2
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+        distance = earth_radius * c
+
+        return distance
+
     #Change glider icon orientation 
     glider = Image.open('images/glider.png').resize((25,25)).rotate(def_orient(position_list))
     glider = ImageTk.PhotoImage(glider)
@@ -121,14 +141,17 @@ def update_position(lat,long):
     map_widget.canvas_marker_list = map_widget.canvas_marker_list[:-2] #only keep the last two markers for clarity
 
     map_widget.set_position(lat, long, marker=True, icon=glider)
-    
+
+
+    def update_path(positions):
+        map_widget.set_path(positions, color="red", width=2)    
 
 
 
 
 def update_data():
 
-    print(map_widget.zoom)
+    print(position_list)
 
     """ DATA DICT:
 
@@ -182,8 +205,8 @@ def update_data():
         write_last_positon(latitude,longitude) #write the last known position to a file 
     else:
         x, y = read_last_positon()
-        update_position(x,y)  # If no data is available, set the position to the last known position for preloading of the map
-    window.after(500, update_data) #Initial value is 200
+        update_position(x,y,speed)  # If no data is available, set the position to the last known position for preloading of the map
+    window.after(1000, update_data) #Initial value is 200
 
     #time.sleep(0.25) #Initial value is 0.25
 

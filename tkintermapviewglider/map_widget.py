@@ -37,6 +37,8 @@ class TkinterMapView(tkinter.Frame):
 
         self.running = True
 
+        print("TkinterMapView: Initializing...")
+
         self.width = width
         self.height = height
         self.corner_radius = corner_radius if corner_radius <= 30 else 30  # corner_radius can't be greater than 30
@@ -141,13 +143,14 @@ class TkinterMapView(tkinter.Frame):
         self.image_load_queue_results: List[tuple] = []  # result: ((zoom, x, y), canvas_tile_object, photo_image)
         self.after(10, self.update_canvas_tile_images)
         self.image_load_thread_pool: List[threading.Thread] = []
-        # MODIFIED 
+
         # add background threads which load tile images from self.image_load_queue_tasks
-        for i in range(15):
+        """
+        for i in range(20):
             image_load_thread = threading.Thread(daemon=True, target=self.load_images_background)
             image_load_thread.start()
             self.image_load_thread_pool.append(image_load_thread)
-
+        """
         # set initial position
         self.set_zoom(17)
         self.set_position(52.516268, 13.377695)  # Brandenburger Tor, Berlin
@@ -309,7 +312,7 @@ class TkinterMapView(tkinter.Frame):
         """ set new middle position of map in decimal coordinates """
 
         # convert given decimal coordinates to OSM coordinates and set corner positions accordingly
-        current_tile_position = decimal_to_osm(deg_x, deg_y, self.zoom)
+        current_tile_position = decimal_to_osm(deg_x, deg_y, round(self.zoom))
         self.upper_left_tile_pos = (current_tile_position[0] - ((self.width / 2) / self.tile_size),
                                     current_tile_position[1] - ((self.height / 2) / self.tile_size))
 
@@ -323,6 +326,7 @@ class TkinterMapView(tkinter.Frame):
 
         self.check_map_border_crossing()
         self.draw_initial_array()
+        # self.draw_move() ausreichend?
 
         return marker_object
 
@@ -369,8 +373,8 @@ class TkinterMapView(tkinter.Frame):
         self.canvas_marker_list.append(marker)
         return marker
 
-    def set_path(self, position_list: list, color, **kwargs) -> CanvasPath:
-        path = CanvasPath(self, position_list, color, **kwargs)
+    def set_path(self, position_list: list, **kwargs) -> CanvasPath:
+        path = CanvasPath(self, position_list, **kwargs)
         path.draw()
         self.canvas_path_list.append(path)
         return path
@@ -408,10 +412,8 @@ class TkinterMapView(tkinter.Frame):
         self.canvas.lift("corner")
         self.canvas.lift("button")
 
-    CACHE_LIMIT = 5_000 # 10_000 images = 80 MB RAM-usage
-
     def pre_cache(self):
-        """Single-threaded pre-cache tile images in the area of self.pre_cache_position."""
+        """ single threaded pre-chache tile images in area of self.pre_cache_position """
         last_pre_cache_position = None
         radius = 1
         zoom = round(self.zoom)
@@ -429,91 +431,100 @@ class TkinterMapView(tkinter.Frame):
                 radius = 1
 
             if last_pre_cache_position is not None and radius <= 8:
-                for x in range(self.pre_cache_position[0] - radius, self.pre_cache_position[0] + radius + 1):
-                    for y in range(self.pre_cache_position[1] - radius, self.pre_cache_position[1] + radius + 1):
-                        key = f"{zoom}{x}{y}"
-                        if key not in self.tile_image_cache:
-                            self.request_image(zoom, x, y, db_cursor=db_cursor)
 
+                # pre cache top and bottom row
+                for x in range(self.pre_cache_position[0] - radius, self.pre_cache_position[0] + radius + 1):
+                    if f"{zoom}{x}{self.pre_cache_position[1] + radius}" not in self.tile_image_cache:
+                        self.request_image(zoom, x, self.pre_cache_position[1] + radius, db_cursor=db_cursor)
+                    if f"{zoom}{x}{self.pre_cache_position[1] - radius}" not in self.tile_image_cache:
+                        self.request_image(zoom, x, self.pre_cache_position[1] - radius, db_cursor=db_cursor)
+
+                # pre cache left and right column
+                for y in range(self.pre_cache_position[1] - radius, self.pre_cache_position[1] + radius + 1):
+                    if f"{zoom}{self.pre_cache_position[0] + radius}{y}" not in self.tile_image_cache:
+                        self.request_image(zoom, self.pre_cache_position[0] + radius, y, db_cursor=db_cursor)
+                    if f"{zoom}{self.pre_cache_position[0] - radius}{y}" not in self.tile_image_cache:
+                        self.request_image(zoom, self.pre_cache_position[0] - radius, y, db_cursor=db_cursor)
+
+                # raise the radius
                 radius += 1
+
             else:
                 time.sleep(0.1)
 
-            if len(self.tile_image_cache) > self.CACHE_LIMIT:
-                keys_to_delete = list(self.tile_image_cache.keys())[:len(self.tile_image_cache) - self.CACHE_LIMIT]
-                self.tile_image_cache = {key: self.tile_image_cache[key] for key in self.tile_image_cache if key not in keys_to_delete}
+            # 10_000 images = 80 MB RAM-usage
+            if len(self.tile_image_cache) > 10_000:  # delete random tiles if cache is too large
+                # create list with keys to delete
+                keys_to_delete = []
+                for key in self.tile_image_cache.keys():
+                    if len(self.tile_image_cache) - len(keys_to_delete) > 10_000:
+                        keys_to_delete.append(key)
 
-        if db_cursor is not None:
-            db_cursor.close()
-            db_connection.close()
-    
-#MODIFIED function for getting the image from the database, should be faster than the original
+                # delete keys in list so that len(self.tile_image_cache) == 10_000
+                for key in keys_to_delete:
+                    del self.tile_image_cache[key]
+
     def request_image(self, zoom: int, x: int, y: int, db_cursor=None) -> ImageTk.PhotoImage:
+        """
+        # if database is available check first if tile is in database, if not try to use server
+        if db_cursor is not None:
+            try:
+                db_cursor.execute("SELECT t.tile_image FROM tiles t WHERE t.zoom=? AND t.x=? AND t.y=? AND t.server=?;",
+                                  (zoom, x, y, self.tile_server))
+                result = db_cursor.fetchone()
 
-        # Check if the tile image is in the cache
-         cache_key = f"{zoom}{x}{y}"
-         if cache_key in self.tile_image_cache:
-             return self.tile_image_cache[cache_key]
+                if result is not None:
+                    image = Image.open(io.BytesIO(result[0]))
+                    image_tk = ImageTk.PhotoImage(image)
+                    self.tile_image_cache[f"{zoom}{x}{y}"] = image_tk
+                    return image_tk
+                elif self.use_database_only:
+                    return self.empty_tile_image
+                else:
+                    pass
 
-         # If database is available, check if the tile is in the database
-         if db_cursor is not None:
-             try:
-                 db_cursor.execute(
-                     "SELECT t.tile_image FROM tiles t WHERE t.zoom=? AND t.x=? AND t.y=? AND t.server=?;",
-                     (zoom, x, y, self.tile_server)
-                 )
-                 result = db_cursor.fetchone()
+            except sqlite3.OperationalError:
+                if self.use_database_only:
+                    return self.empty_tile_image
+                else:
+                    pass
 
-                 if result is not None:
-                     image = Image.open(io.BytesIO(result[0]))
-                     image_tk = ImageTk.PhotoImage(image)
-                     self.tile_image_cache[cache_key] = image_tk
-                     return image_tk
+            except Exception:
+                return self.empty_tile_image
+        """
+        # try to get the tile from the server
+        try:
+            url = self.tile_server.replace("{x}", str(x)).replace("{y}", str(y)).replace("{z}", str(zoom))
+            image = Image.open(requests.get(url, stream=True, headers={"User-Agent": "TkinterMapView"}).raw)
 
-                 elif self.use_database_only:
-                     self.tile_image_cache[cache_key] = self.empty_tile_image
-                     return self.empty_tile_image
+            if self.overlay_tile_server is not None:
+                url = self.overlay_tile_server.replace("{x}", str(x)).replace("{y}", str(y)).replace("{z}", str(zoom))
+                image_overlay = Image.open(requests.get(url, stream=True, headers={"User-Agent": "TkinterMapView"}).raw)
+                image = image.convert("RGBA")
+                image_overlay = image_overlay.convert("RGBA")
 
-             except sqlite3.OperationalError:
-                 if self.use_database_only:
-                     self.tile_image_cache[cache_key] = self.empty_tile_image
-                     return self.empty_tile_image
+                if image_overlay.size is not (self.tile_size, self.tile_size):
+                    image_overlay = image_overlay.resize((self.tile_size, self.tile_size), Image.ANTIALIAS)
 
-             except Exception:
-                 pass
-             
-         # Try to get the tile from the server
-         try:
-             url = self.tile_server.replace("{x}", str(x)).replace("{y}", str(y)).replace("{z}", str(zoom))
-             response = requests.get(url, stream=True, headers={"User-Agent": "TkinterMapView"})
-             response.raise_for_status()
+                image.paste(image_overlay, (0, 0), image_overlay)
 
-             image = Image.open(io.BytesIO(response.content))
+            if self.running:
+                image_tk = ImageTk.PhotoImage(image)
+            else:
+                return self.empty_tile_image
 
-             if self.overlay_tile_server is not None:
-                 overlay_url = self.overlay_tile_server.replace("{x}", str(x)).replace("{y}", str(y)).replace("{z}", str(zoom))
-                 overlay_response = requests.get(overlay_url, stream=True, headers={"User-Agent": "TkinterMapView"})
-                 overlay_response.raise_for_status()
+            self.tile_image_cache[f"{zoom}{x}{y}"] = image_tk
+            return image_tk
 
-                 image_overlay = Image.open(io.BytesIO(overlay_response.content))
-                 image = image.convert("RGBA")
-                 image_overlay = image_overlay.convert("RGBA")
+        except PIL.UnidentifiedImageError:  # image does not exist for given coordinates
+            self.tile_image_cache[f"{zoom}{x}{y}"] = self.empty_tile_image
+            return self.empty_tile_image
 
-                 if image_overlay.size != (self.tile_size, self.tile_size):
-                     image_overlay = image_overlay.resize((self.tile_size, self.tile_size), Image.ANTIALIAS)
+        except requests.exceptions.ConnectionError:
+            return self.empty_tile_image
 
-                 image.paste(image_overlay, (0, 0), image_overlay)
-
-             if self.running:
-                 image_tk = ImageTk.PhotoImage(image)
-                 self.tile_image_cache[cache_key] = image_tk
-                 return image_tk
-
-         except (PIL.UnidentifiedImageError, requests.exceptions.RequestException):
-             pass
-         
-         self.tile_image_cache[cache_key] = self.empty_tile_image
-         return self.empty_tile_image
+        except Exception:
+            return self.empty_tile_image
 
     def get_tile_image_from_cache(self, zoom: int, x: int, y: int):
         if f"{zoom}{x}{y}" not in self.tile_image_cache:
@@ -527,7 +538,6 @@ class TkinterMapView(tkinter.Frame):
             db_cursor = db_connection.cursor()
         else:
             db_cursor = None
-
         while self.running:
             if len(self.image_load_queue_tasks) > 0:
                 # task queue structure: [((zoom, x, y), corresponding canvas tile object), ... ]
@@ -860,8 +870,6 @@ class TkinterMapView(tkinter.Frame):
                                                     mouse_tile_pos_y,
                                                     round(self.zoom))
         self.zoom = zoom
-
-        
 
         if self.zoom > self.max_zoom:
             self.zoom = self.max_zoom

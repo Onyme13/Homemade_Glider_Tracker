@@ -2,8 +2,7 @@ import serial
 from datetime import datetime
 import itertools
 import time
-from constants import *
-
+from constants import SEALEVELPRESSURE, METERSOFAIRHETCOPASCAL, HETCOPASCALMETERSOFAIR
 
 arduinoSerial = serial.Serial('COM4', 9600)
 
@@ -47,8 +46,8 @@ def vertical_speed(alt):
 
 def data():
     #time.sleep(1)
-    while arduinoSerial.inWaiting() == 0:
-        pass
+    #while arduinoSerial.inWaiting() == 0:
+    #    pass
     dataString = arduinoSerial.readline().decode('utf-8')
     dataArray = dataString.replace('\r\n', '').split(',')
 
@@ -99,7 +98,6 @@ def data():
 
     print(returnDict)
     return returnDict
-
 
 #while True:
 #    data()

@@ -5,10 +5,7 @@ from main import *
 from positions_functions import *
 import tkintermapviewglider as tkintermapview
 from PIL import Image, ImageTk
-import threading
-import os
 from constants import *
-
 
 
 
@@ -128,7 +125,6 @@ def update_position(lat,long):
 
 def update_data():
 
-    print(map_widget.zoom)
 
     """ DATA DICT:
 
@@ -183,8 +179,8 @@ def update_data():
     else:
         x, y = read_last_positon()
         update_position(x,y)  # If no data is available, set the position to the last known position for preloading of the map
-    window.after(500, update_data) #Initial value is 200
 
+    window.after(800, update_data) #Initial value is 200
     #time.sleep(0.25) #Initial value is 0.25
 
 

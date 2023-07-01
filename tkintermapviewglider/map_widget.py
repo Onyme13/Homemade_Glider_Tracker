@@ -465,7 +465,6 @@ class TkinterMapView(tkinter.Frame):
                     del self.tile_image_cache[key]
 
     def request_image(self, zoom: int, x: int, y: int, db_cursor=None) -> ImageTk.PhotoImage:
-        """
         # if database is available check first if tile is in database, if not try to use server
         if db_cursor is not None:
             try:
@@ -491,7 +490,6 @@ class TkinterMapView(tkinter.Frame):
 
             except Exception:
                 return self.empty_tile_image
-        """
         # try to get the tile from the server
         try:
             url = self.tile_server.replace("{x}", str(x)).replace("{y}", str(y)).replace("{z}", str(zoom))

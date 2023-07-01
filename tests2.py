@@ -6,7 +6,6 @@ from positions_functions import *
 import tkintermapviewglider as tkintermapview
 from PIL import Image, ImageTk
 from constants import *
-import threading
 
 
 
@@ -127,6 +126,7 @@ def update_position(lat,long):
 def update_data():
 
 
+    print("Updating data")
     """ DATA DICT:
 
         "time": 0,
@@ -174,21 +174,17 @@ def update_data():
 
 
     #Location update
-    if latitude!= 0 and longitude!= 0:
-        update_position(latitude,longitude) #update position for UI
-        write_last_positon(latitude,longitude) #write the last known position to a file 
-    else:
-        x, y = read_last_positon()
-        update_position(x,y)  # If no data is available, set the position to the last known position for preloading of the map
+    #if latitude!= 0 and longitude!= 0:
+    #    update_position(latitude,longitude) #update position for UI
+    #    write_last_positon(latitude,longitude) #write the last known position to a file 
+    #else:
+    #    x, y = read_last_positon()
+    #    update_position(x,y)  # If no data is available, set the position to the last known position for preloading of the map
 
     window.after(800, update_data) #Initial value is 200
     #time.sleep(0.25) #Initial value is 0.25
 
-def start_update_thread():
-    # Create a new thread for the update process
-    update_thread = threading.Thread(target=update_data)
-    update_thread.daemon = True  # Allow the program to exit even if the thread is running
-    update_thread.start()
+
 
 
 def update_bat():
@@ -198,6 +194,6 @@ def update_bat():
 
 #thread_update_data = threading.Thread(target=update_data)
 #thread_update_data.start()
-start_update_thread()
-#update_data()
+
+update_data()
 window.mainloop()

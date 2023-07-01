@@ -1,5 +1,5 @@
 import tkinter
-import tkintermapviewglider as tkintermapview
+import tkintermapview
 
 # create tkinter window
 root_tk = tkinter.Tk()

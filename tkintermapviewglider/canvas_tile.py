@@ -55,7 +55,7 @@ class CanvasTile:
         canvas_pos_x, canvas_pos_y = self.get_canvas_pos()
 
         if self.canvas_object is None:
-            if not (self.image == self.map_widget.not_loaded_tile_image or self.image == self.map_widget.empty_tile_image):
+            if not (self.image == self.map_widget.not_loaded_tile_image or self.image == self.image == self.map_widget.empty_tile_image):
                 self.canvas_object = self.map_widget.canvas.create_image(canvas_pos_x,
                                                                          canvas_pos_y,
                                                                          image=self.image,

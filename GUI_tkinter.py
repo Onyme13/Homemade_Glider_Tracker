@@ -103,7 +103,7 @@ def update_position(lat,long,speed):
     global position_list
 
     #Only add the new position to the list if the plane is moving
-    if speed > 50:
+    if speed > 40:
 
         if len(position_list) < 2:
             position_list.append([lat,long])
@@ -114,7 +114,7 @@ def update_position(lat,long,speed):
 
             distance = calculate_distance(current_position, prevous_position)
 
-            threshold = 0.0005 #If the distance between the two points is less than this, don't add the new point to the list
+            threshold = 0.01 #If the distance between the two points is less than this, don't add the new point to the list. 0.01 is about 10m
 
             if distance > threshold:
                 position_list.append([lat,long])

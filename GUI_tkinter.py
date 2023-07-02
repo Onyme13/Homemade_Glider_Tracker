@@ -98,7 +98,7 @@ settings_button.grid(row=8, rowspan=2 ,column=7,columnspan=1)
 
 
 
-def update_position(lat,long,speed):
+def update_position(alt,lat,long,speed):
 
     global position_list
 
@@ -117,7 +117,7 @@ def update_position(lat,long,speed):
             threshold = 0.01 #If the distance between the two points is less than this, don't add the new point to the list. 0.01 is about 10m
 
             if distance > threshold:
-                position_list.append([lat,long])
+                position_list.append([alt,lat,long])
                 update_path(position_list)
 
     def calculate_distance(current_position, prevous_position):
@@ -144,8 +144,42 @@ def update_position(lat,long,speed):
 
 
     def update_path(positions):
-        map_widget.set_path(positions, color="red", width=2)    
+        
+        mouvement = []
 
+        alt_diff = positions[-1][0] - positions[-2][0]
+
+        if len(positions) > 2:
+            color = map_value_to_color(alt_diff)
+            mouvement.append(positions[0][1:3])
+            mouvement.append(positions[1][1:3])
+
+            path = map_widget.set_path(positions, color=color, width=2)
+    if len(position_list) > 3:
+        position_list.pop(0)
+
+
+#Update the vertical speed color label
+def map_value_to_color(value):
+
+    color_scale = {
+        -5: (0, 0, 1),   # Blue
+        0: (1, 1, 1),    # White
+        5: (1, 0, 0)     # Red
+    }
+
+    closest_values = sorted(color_scale.keys(), key=lambda x: abs(x - value))[:2]
+
+    color_ratio = (value - closest_values[0]) / (closest_values[1] - closest_values[0])
+
+    color_start = color_scale[closest_values[0]]
+    color_end = color_scale[closest_values[1]]
+
+    r = int((1 - color_ratio) * color_start[0] + color_ratio * color_end[0])
+    g = int((1 - color_ratio) * color_start[1] + color_ratio * color_end[1])
+    b = int((1 - color_ratio) * color_start[2] + color_ratio * color_end[2])
+
+    return f"#{r:02x}{g:02x}{b:02x}"
 
 
 
@@ -205,7 +239,7 @@ def update_data():
         write_last_positon(latitude,longitude) #write the last known position to a file 
     else:
         x, y = read_last_positon()
-        update_position(x,y,speed)  # If no data is available, set the position to the last known position for preloading of the map
+        update_position(altitude,x,y,speed)  # If no data is available, set the position to the last known position for preloading of the map
     window.after(1000, update_data) #Initial value is 200
 
     #time.sleep(0.25) #Initial value is 0.25

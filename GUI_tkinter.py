@@ -10,6 +10,9 @@ import os
 from constants import *
 
 
+#TODO: add position to a JSON file  
+
+SPEED_THRESHOLD = 5 #km/h modify value for testing
 
 
 position_list = []
@@ -103,7 +106,7 @@ def update_position(alt,lat,long,speed):
     global position_list
 
     #Only add the new position to the list if the plane is moving
-    if speed > 40:
+    if speed > SPEED_THRESHOLD:
 
         if len(position_list) < 2:
             position_list.append([lat,long])

@@ -228,3 +228,5 @@ poetry.toml
 #Divers data folders
 data/
 tiles_Grey/
+tiles_Grey.zip/
+

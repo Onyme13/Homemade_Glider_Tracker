@@ -8,6 +8,29 @@ from PIL import Image, ImageTk
 import threading
 import os
 from constants import *
+from data_simulation import *
+
+
+#TODO: add position to a JSON file  
+#TODO: find a way to put the path to global
+
+
+####################3####FOR SIMULATIO####################
+
+#min_latitude = 45.8177
+#max_latitude = 47.8084
+#min_longitude = 5.9559
+#max_longitude = 10.4922
+    
+init = True
+
+latitude_old = 0
+longitude_old = 0
+
+latitude_init,longitude_init = 46.600208, 6.376650
+
+
+#####################################################################
 
 ##################### CPU uilization ##################################
 import psutil
@@ -24,12 +47,13 @@ def write_cpu_utilization(file_path):
 #####################################################################
 
 
-#TODO: add position to a JSON file  
 
-SPEED_THRESHOLD = 2 #km/h modify value for testing
-REFRESH_RATE = 1000 #miliseconds
+SPEED_THRESHOLD = 0 #km/h modify value for testing
+REFRESH_RATE = 2000 #miliseconds
 
 position_list = []
+mouvement = []
+path_created = False
 
 
 window = Tk()
@@ -81,7 +105,7 @@ map_widget.set_tile_server("http://127.0.0.1:5000/tiles/{z}/{x}/{y}.png", max_zo
 map_widget.grid(row=2,rowspan=6,column=0,columnspan=9)
 x, y = read_last_positon()
 map_widget.set_position(x,y)  #  If no data is available, set the position to the last known position for preloading of the map
-map_widget.set_zoom(12) 
+map_widget.set_zoom(14) 
 map_widget.max_zoom = 14
 map_widget.min_zoom = 9
 
@@ -112,47 +136,72 @@ settings_button = Button(window,image=image_settings,bg=BLACK)
 settings_button.grid(row=8, rowspan=2 ,column=7,columnspan=1)
 
 
+path = map_widget.set_path(mouvement, color="#F0F0F0", width=2)
 
+
+def update_path(mouvement):
+    global path_created
+    global path
+    
+    alt_diff = mouvement[-1][0] - mouvement[-2][0]
+    if not path_created :
+        color = map_value_to_color(alt_diff)
+        path = map_widget.set_path(mouvement, color=color, width=2)
+        path_created = True
+        print("path created")
+    else:
+        print("path modified")
+        path.add_position(mouvement[-1][0],mouvement[-1][1])
+
+def calculate_distance(current_position, prevous_position):
+    lat1, lon1 = current_position
+    lat2, lon2 = prevous_position
+    earth_radius = 6371  # Earth's radius in kilometers
+    dlat = math.radians(lat2 - lat1)
+    dlong = math.radians(lon2 - lon1)
+    a = math.sin(dlat / 2) ** 2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlong / 2) ** 2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    distance = earth_radius * c
+    return distance
 
 
 def update_position(alt,lat,long,speed):
 
     global position_list
+    global mouvement
+    
 
+    
     #Only add the new position to the list if the plane is moving
-    if speed > SPEED_THRESHOLD:
-        def calculate_distance(current_position, prevous_position):
-            lat1, lon1 = current_position
-            lat2, lon2 = prevous_position
-
-            earth_radius = 6371  # Earth's radius in kilometers
-            dlat = math.radians(lat2 - lat1)
-            dlong = math.radians(lon2 - lon1)
-            a = math.sin(dlat / 2) ** 2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlong / 2) ** 2
-            c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-            distance = earth_radius * c
-
-            return distance
+    if speed >= SPEED_THRESHOLD:
 
 
+        position_list.append([lat,long])
+        mouvement.append([lat,long])
 
-        if len(position_list) < 2:
-            position_list.append([lat,long])
 
-        if len(position_list) >= 2:
-            current_position = position_list[-1]
-            prevous_position = position_list[-2]
+        if len(position_list) > 2:
+            position_list.pop(0)
+            mouvement.pop(0)
+
+
+        if len(mouvement) >= 2:
+
+            current_position = mouvement[-1]
+            prevous_position = mouvement[-2]
 
             distance = calculate_distance(current_position, prevous_position)
 
             threshold = 0.01 #If the distance between the two points is less than this, don't add the new point to the list. 0.01 is about 10m
 
             if distance > threshold:
-                position_list.append([alt,lat,long])
-                update_path(position_list)
+                update_path(mouvement)
+    print(position_list)
+
+
 
     #Change glider icon orientation 
-    glider = Image.open('images/glider.png').resize((25,25)).rotate(def_orient(position_list))
+    glider = Image.open('images/glider.png').resize((25,25)).rotate(orient(position_list))
     glider = ImageTk.PhotoImage(glider)
 
     #map_widget.delete_all_marker()
@@ -161,21 +210,7 @@ def update_position(alt,lat,long,speed):
     map_widget.set_position(lat, long, marker=True, icon=glider)
 
 
-    def update_path(positions):
-        
-        mouvement = []
-
-        alt_diff = positions[-1][0] - positions[-2][0]
-
-        if len(positions) > 2:
-            color = map_value_to_color(alt_diff)
-            mouvement.append(positions[0][1:3])
-            mouvement.append(positions[1][1:3])
-
-            path = map_widget.set_path(positions, color=color, width=2)
-    if len(position_list) > 3:
-        position_list.pop(0)
-
+    
 
 #Update the vertical speed color label
 def map_value_to_color(value):
@@ -202,8 +237,9 @@ def map_value_to_color(value):
 
 
 def update_data():
+    global init
+    global latitude_old, longitude_old
 
-    print(position_list)
 
     write_cpu_utilization('cpu_utilization.txt')
 
@@ -231,10 +267,20 @@ def update_data():
     altitude = my_data['alt']
     speed = my_data['speed']
     vert_speed = my_data['vert'] #vertical_speed(my_data['alt'])
-    latitude = my_data['lat']
-    longitude = my_data['long']
     satellites = my_data['sat']
     localQNH = my_data['localQNH']   
+
+    if init == True:
+        latitude, longitude = simulate_gps_position(latitude_init,longitude_init)
+        latitude_old = latitude
+        longitude_old = longitude
+        init = False
+    else:
+        latitude, longitude = simulate_gps_position(latitude_old,longitude_old)
+        latitude_old = latitude
+        longitude_old = longitude
+    
+    print(latitude, longitude)
 
     #Time text update
     label_time_text.config(text=str(current_time))

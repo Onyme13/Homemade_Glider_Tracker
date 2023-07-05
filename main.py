@@ -12,11 +12,11 @@ previous_altitude = 0
 previous_time = 0
 altitudeBucket = []
 altGPSArray = []
-localQNH = 0
 heightCalibrated = 0
 calibrated = False  
+localQNH = 0
 
-def adapt_local_pressure(altGPS, alt):
+def adapt_local_pressure(altGPS,alt):
     global localQNH
     global heightCalibrated
     global calibrated
@@ -30,6 +30,7 @@ def adapt_local_pressure(altGPS, alt):
             localQNH = SEALEVELPRESSURE + ((sum(altGPSArray) / len(altGPSArray)) - alt) * METERSOFAIRHETCOPASCAL
             heightCalibrated = round((localQNH - SEALEVELPRESSURE) * HETCOPASCALMETERSOFAIR, 1)
             calibrated = True  
+            print("CALIBRATEDDD")
 
 def vertical_speed(alt):
     global previous_altitude, previous_time
@@ -70,7 +71,7 @@ def data():
         vert_speed = vertical_speed(altitude)
         if calibrated:
             altitude += heightCalibrated
-        returnDict.update({"vert": vert_speed, "alt": altitude})
+        returnDict.update({"vert": vert_speed, "alt": altitude, "localQNH":localQNH})
     elif len(dataArray) >= 5:
         latitude = float(dataArray[0]) 
         longitude = float(dataArray[1])
@@ -94,9 +95,9 @@ def data():
             "altGPS": altitudeGPS,
             "sat": satellites,
             "vert": vert_speed,
-            "alt": altitude
+            "alt": altitude,
+            "localQNH":localQNH
         })
-
     print(returnDict)
     return returnDict
 

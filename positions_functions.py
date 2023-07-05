@@ -4,9 +4,9 @@ import math
 
 
 #Function that define the oritentation of the glider (360°)
-def def_orient(list_position):
+def orient(list_position):
 
-    if len(list_position) > 2:
+    if len(list_position) >= 2:
         old_lat = list_position[-2][0]
         old_long = list_position[-2][1]
 
@@ -38,4 +38,13 @@ def read_last_positon():
         lat,long = f.readline().split(",")
         return float(lat),float(long)
     
+def write_mouvement(alt,lat,long):
+    with open("data/mouvement.csv", "a") as f:
+        f.write(str(lat)+","+str(lat)+","+str(long))
+
+
+def read_mouvement():
+    with open("data/mouvement.csv", "r") as f:
+        alt,lat,long = f.readline().split(",")
+        return float(alt), float(lat),float(long)
 

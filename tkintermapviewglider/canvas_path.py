@@ -50,7 +50,7 @@ class CanvasPath:
             self.position_list.append((deg_x, deg_y))
         else:
             self.position_list.insert(index, (deg_x, deg_y))
-        # self.draw()
+        self.draw()
 
     def remove_position(self, deg_x, deg_y):
         self.position_list.remove((deg_x, deg_y))

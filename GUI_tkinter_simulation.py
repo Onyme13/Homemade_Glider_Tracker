@@ -143,7 +143,7 @@ def update_path(mouvement):
     global path_created
     global path
     
-    alt_diff = mouvement[-1][0] - mouvement[-2][0]
+    alt_diff = position_list[-1][0] - position_list[-2][0]
     if not path_created :
         color = map_value_to_color(alt_diff)
         path = map_widget.set_path(mouvement, color=color, width=2)

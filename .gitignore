@@ -229,5 +229,5 @@ poetry.toml
 data/
 tiles_Grey/
 tiles_Grey.zip/
-cpu_utilization/
+cpu_utilization.txt/
 

@@ -369,8 +369,8 @@ class TkinterMapView(tkinter.Frame):
         self.canvas_marker_list.append(marker)
         return marker
 
-    def set_path(self, position_list: list, color, **kwargs) -> CanvasPath:
-        path = CanvasPath(self, position_list, color, **kwargs)
+    def set_path(self, position_list: list, **kwargs) -> CanvasPath:
+        path = CanvasPath(self, position_list, **kwargs)
         path.draw()
         self.canvas_path_list.append(path)
         return path
@@ -380,6 +380,7 @@ class TkinterMapView(tkinter.Frame):
         polygon.draw()
         self.canvas_polygon_list.append(polygon)
         return polygon
+    
 
     def delete(self, map_object: any):
         if isinstance(map_object, (CanvasPath, CanvasPositionMarker, CanvasPolygon)):

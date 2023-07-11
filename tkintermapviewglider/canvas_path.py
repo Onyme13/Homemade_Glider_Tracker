@@ -13,6 +13,7 @@ class CanvasPath:
                  map_widget: "TkinterMapView",
                  position_list: list,
                  color: str = "#182A51",
+                 colors: list = None,
                  command=None,
                  name: str = None,
                  width: int = 9,
@@ -22,6 +23,9 @@ class CanvasPath:
         self.position_list = position_list
         self.canvas_line_positions = []
         self.deleted = False
+
+        self.colors = colors
+        self.canvas_lines = []
 
         self.path_color = color
         self.command = command
@@ -45,12 +49,14 @@ class CanvasPath:
         self.position_list = position_list
         self.draw()
 
-    def add_position(self, deg_x, deg_y, index=-1):
+    def add_position(self, deg_x, deg_y, color,index=-1):
         if index == -1:
             self.position_list.append((deg_x, deg_y))
+            self.colors.append(color)
         else:
             self.position_list.insert(index, (deg_x, deg_y))
-        self.draw()
+            self.colors.append(color)
+        #self.draw()
 
     def remove_position(self, deg_x, deg_y):
         self.position_list.remove((deg_x, deg_y))
@@ -90,7 +96,7 @@ class CanvasPath:
             x_move = ((self.last_upper_left_tile_pos[0] - self.map_widget.upper_left_tile_pos[0]) / widget_tile_width) * self.map_widget.width
             y_move = ((self.last_upper_left_tile_pos[1] - self.map_widget.upper_left_tile_pos[1]) / widget_tile_height) * self.map_widget.height
 
-            for i in range(0, len(self.position_list)* 2, 2):
+            for i in range(0, len(self.position_list) * 2, 2):
                 self.canvas_line_positions[i] += x_move
                 self.canvas_line_positions[i + 1] += y_move
         else:
@@ -101,22 +107,29 @@ class CanvasPath:
                 self.canvas_line_positions.append(canvas_position[1])
 
         if not self.deleted:
-            if self.canvas_line is None:
-                self.map_widget.canvas.delete(self.canvas_line)
-                self.canvas_line = self.map_widget.canvas.create_line(self.canvas_line_positions,
-                                                                      width=self.width, fill=self.path_color,
-                                                                      capstyle=tkinter.ROUND, joinstyle=tkinter.ROUND,
-                                                                      tag="path")
+            if self.canvas_lines:
+                for line in self.canvas_lines:
+                    self.map_widget.canvas.delete(line)
+                self.canvas_lines.clear()
+
+            for i in range(len(self.position_list) - 1):
+                segment_color = self.colors[i]
+                start_index = i * 2
+                end_index = start_index + 4
+                canvas_line = self.map_widget.canvas.create_line(
+                    self.canvas_line_positions[start_index:end_index],
+                    width=self.width,
+                    fill=segment_color,
+                    capstyle=tkinter.ROUND,
+                    joinstyle=tkinter.ROUND,
+                    tag="path"
+                )
+                self.canvas_lines.append(canvas_line)
 
                 if self.command is not None:
-                    self.map_widget.canvas.tag_bind(self.canvas_line, "<Enter>", self.mouse_enter)
-                    self.map_widget.canvas.tag_bind(self.canvas_line, "<Leave>", self.mouse_leave)
-                    self.map_widget.canvas.tag_bind(self.canvas_line, "<Button-1>", self.click)
-            else:
-                self.map_widget.canvas.coords(self.canvas_line, self.canvas_line_positions)
-        else:
-            self.map_widget.canvas.delete(self.canvas_line)
-            self.canvas_line = None
+                    self.map_widget.canvas.tag_bind(canvas_line, "<Enter>", self.mouse_enter)
+                    self.map_widget.canvas.tag_bind(canvas_line, "<Leave>", self.mouse_leave)
+                    self.map_widget.canvas.tag_bind(canvas_line, "<Button-1>", self.click)
 
         self.map_widget.manage_z_order()
         self.last_upper_left_tile_pos = self.map_widget.upper_left_tile_pos

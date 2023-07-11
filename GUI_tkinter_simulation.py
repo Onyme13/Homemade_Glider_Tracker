@@ -11,11 +11,11 @@ from constants import *
 from data_simulation import *
 
 
+#TODO: change function for orientation of the plane
 #TODO: add position to a JSON file  
-#TODO: find a way to put the path to global
 
 
-####################3####FOR SIMULATIO####################
+#########################FOR SIMULATIO####################
 
 #min_latitude = 45.8177
 #max_latitude = 47.8084
@@ -28,6 +28,15 @@ latitude_old = 0
 longitude_old = 0
 
 latitude_init,longitude_init = 46.600208, 6.376650
+
+
+
+def generate_random_color():
+    red = random.randint(0, 255)
+    green = random.randint(0, 255)
+    blue = random.randint(0, 255)
+    color_hex = '#{:02x}{:02x}{:02x}'.format(red, green, blue)
+    return color_hex
 
 
 #####################################################################
@@ -49,14 +58,24 @@ def write_cpu_utilization(file_path):
 
 
 SPEED_THRESHOLD = 0 #km/h modify value for testing
-REFRESH_RATE = 2000 #miliseconds
+REFRESH_RATE = 1000 #miliseconds
 
 position_list = []
 mouvement = []
 path_created = False
+colors_list = ["#FF0000","#FF0000"]
 
 
 window = Tk()
+
+def toggle_fullscreen(event=None):
+    state = window.attributes('-fullscreen')
+    window.attributes('-fullscreen', not state)
+
+window.bind('<F11>', toggle_fullscreen)
+window.bind('<Escape>', toggle_fullscreen)
+# Start the application in full-screen mode
+window.attributes('-fullscreen', False) # True for full-screen
 
 window.title('GPS')
 window.minsize(width=320,height=480)
@@ -119,7 +138,7 @@ label_alt.grid(row=9, column=0,columnspan=3)
 
 
 
-label_therm_text = Label(window, text="THERM.",fg=WHITE,background=BLACK,font=FONT)
+label_therm_text = Label(window, text="V/S.",fg=WHITE,background=BLACK,font=FONT)
 label_therm_text.grid(row=8, column=2,columnspan=3)
 label_therm = Label(window, text="00 m/s",fg=WHITE,background=BLACK,font=FONT)
 label_therm.grid(row=9, column=2,columnspan=3)
@@ -136,8 +155,8 @@ settings_button = Button(window,image=image_settings,bg=BLACK)
 settings_button.grid(row=8, rowspan=2 ,column=7,columnspan=1)
 
 
-path = map_widget.set_path(mouvement, color="#F0F0F0", width=2)
-
+path = map_widget.set_path([(46.600208, 6.376650),(46.600308, 6.376750)],colors=colors_list, width=2)
+path_created = True
 
 def update_path(mouvement):
     global path_created
@@ -148,10 +167,9 @@ def update_path(mouvement):
         color = map_value_to_color(alt_diff)
         path = map_widget.set_path(mouvement, color=color, width=2)
         path_created = True
-        print("path created")
     else:
-        print("path modified")
-        path.add_position(mouvement[-1][0],mouvement[-1][1])
+        color = generate_random_color()
+        path.add_position(mouvement[-1][0],mouvement[-1][1],color=color)
 
 def calculate_distance(current_position, prevous_position):
     lat1, lon1 = current_position
@@ -196,7 +214,7 @@ def update_position(alt,lat,long,speed):
 
             if distance > threshold:
                 update_path(mouvement)
-    print(position_list)
+    #print(position_list)
 
 
 
@@ -241,7 +259,7 @@ def update_data():
     global latitude_old, longitude_old
 
 
-    write_cpu_utilization('cpu_utilization.txt')
+    #write_cpu_utilization('cpu_utilization.txt')
 
 
 
@@ -280,7 +298,7 @@ def update_data():
         latitude_old = latitude
         longitude_old = longitude
     
-    print(latitude, longitude)
+    #print(latitude, longitude)
 
     #Time text update
     label_time_text.config(text=str(current_time))

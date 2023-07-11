@@ -4,27 +4,33 @@ import math
 
 
 #Function that define the oritentation of the glider (360°)
-def orient(list_position):
+def orient(position_list):
 
-    if len(list_position) >= 2:
-        old_lat = list_position[-2][0]
-        old_long = list_position[-2][1]
+    if len(position_list) >= 2:
 
-        new_lat = list_position[-1][0]
-        new_long = list_position[-1][1]
+        old_latitude = position_list[-2][0]
+        old_longitude = position_list[-2][1]
+        new_latitude = position_list[-1][0]
+        new_longitude = position_list[-1][1]
 
-        if new_long-old_long != 0:
-            tan_calc = (new_lat-old_lat)/(new_long-old_long)
-            if tan_calc < 0:
-                tan_calc *= -1
-        else:
-            tan_calc= 0
-        
-        orientation = math.tan((tan_calc))
-        
-        return orientation
+
+        old_latitude = math.radians(old_latitude)
+        old_longitude = math.radians(old_longitude)
+        new_latitude = math.radians(new_latitude)
+        new_longitude = math.radians(new_longitude)
+
+        delta_latitude = new_latitude - old_latitude
+        delta_longitude = new_longitude - old_longitude
+
+        direction = math.degrees(math.atan2(delta_longitude, delta_latitude))
+
+        direction = (direction + 360) % 360
+
+        return direction
     else:
         return 0
+
+
 
 
 #function that stores the last known postion in CSV file

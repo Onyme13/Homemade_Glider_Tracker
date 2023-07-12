@@ -11,11 +11,10 @@ from constants import *
 from data_simulation import *
 
 
-#TODO: change function for orientation of the plane
 #TODO: add position to a JSON file  
 
 
-#########################FOR SIMULATIO####################
+#########################FOR SIMULATION####################
 
 #min_latitude = 45.8177
 #max_latitude = 47.8084

@@ -14,6 +14,8 @@ from data_simulation import *
 
 SPEED_THRESHOLD = 0 #km/h modify value for testing
 REFRESH_RATE = 1000 #miliseconds
+DISTANCE_THRESHOLD = 0.01 #If the distance between the two points is less than this, don't add the new point to the list. 0.01 is about 10m
+
 
 position_list = []
 mouvement = []
@@ -165,8 +167,7 @@ def update_position(alt,lat,long,speed):
 
             distance = calculate_distance(current_position, prevous_position)
 
-            threshold = 0.01 #If the distance between the two points is less than this, don't add the new point to the list. 0.01 is about 10m
-
+            threshold = DISTANCE_THRESHOLD
             if distance > threshold:
                 update_path(mouvement)
     #print(position_list)

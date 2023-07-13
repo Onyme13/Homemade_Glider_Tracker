@@ -20,6 +20,11 @@ mouvement = []
 colors_list = ["#808080","#808080"]
 
 
+def kill():
+    window.destroy()
+    exit()
+
+
 window = Tk()
 
 def toggle_fullscreen(event=None):
@@ -29,7 +34,7 @@ def toggle_fullscreen(event=None):
 window.bind('<F11>', toggle_fullscreen)
 window.bind('<Escape>', toggle_fullscreen)
 # Start the application in full-screen mode
-window.attributes('-fullscreen', True) # True for full-screen
+window.attributes('-fullscreen', False) # True for full-screen
 
 window.title('GPS')
 window.minsize(width=320,height=480)
@@ -86,26 +91,26 @@ map_widget.min_zoom = 9
 
 #Third row
 label_alt_text = Label(window, text="ALT",fg=WHITE,background=BLACK,font=FONT)
-label_alt_text.grid(row=8, column=0,columnspan=3)
+label_alt_text.grid(row=8, column=0,columnspan=2)
 label_alt = Label(window, text="0000 m",fg=WHITE,background=BLACK,font=FONT)
-label_alt.grid(row=9, column=0,columnspan=3)
+label_alt.grid(row=9, column=0,columnspan=2)
 
 
 
 label_therm_text = Label(window, text="V/S.",fg=WHITE,background=BLACK,font=FONT)
-label_therm_text.grid(row=8, column=2,columnspan=3)
+label_therm_text.grid(row=8, column=3,columnspan=2)
 label_therm = Label(window, text="00 m/s",fg=WHITE,background=BLACK,font=FONT)
-label_therm.grid(row=9, column=2,columnspan=3)
+label_therm.grid(row=9, column=3,columnspan=2)
 
 
 
 label_speed_text = Label(window, text="SPEED",fg=WHITE,background=BLACK,font=FONT)
-label_speed_text.grid(row=8, column=4,columnspan=2)
+label_speed_text.grid(row=8, column=5,columnspan=2)
 label_speed = Label(window, text="000 km/h",fg=WHITE,background=BLACK,font=FONT)
-label_speed.grid(row=9, column=4,columnspan=2)
+label_speed.grid(row=9, column=5,columnspan=2)
 
 image_settings = PhotoImage(file="images/settings.png")
-settings_button = Button(window,image=image_settings,bg=BLACK)
+settings_button = Button(window,image=image_settings,bg=BLACK,command=kill)
 settings_button.grid(row=8, rowspan=2 ,column=7,columnspan=1)
 
 #Initialisation of the path, make it as small as possible
@@ -202,6 +207,7 @@ def map_value_to_color(value):
 
     return f"#{r:02x}{g:02x}{b:02x}"
 
+          
 
 
 def update_data():

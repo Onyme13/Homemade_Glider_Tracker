@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Startup Script
+Exec=lstartup.sh
+Icon=/images/desktop_icon.png
+Terminal=false

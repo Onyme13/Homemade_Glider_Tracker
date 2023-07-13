@@ -5,8 +5,8 @@ import time
 from constants import *
 
 
-arduinoSerial = serial.Serial('COM4', 9600) #For Windows
-#arduinoSerial = serial.Serial('/dev/ttyACM0', 9600) #For Linux
+#arduinoSerial = serial.Serial('COM4', 9600) #For Windows
+arduinoSerial = serial.Serial('/dev/ttyACM0', 9600) #For Linux
 
 
 previous_altitude = 0

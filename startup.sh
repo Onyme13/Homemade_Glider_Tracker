@@ -1,7 +1,15 @@
 #!/bin/bash
 
-sudo python3 Research-Project/server.py 
+sleep 1
 
-sleep 7
+cd Research-Project
 
-lxterminal -e "sudo python3 Research-Project/GUI_tkinter.py"
+sleep 1
+
+sudo python3 ./server.py &
+
+sleep 2
+
+sudo python3 ./GUI_tkinter.py
+
+

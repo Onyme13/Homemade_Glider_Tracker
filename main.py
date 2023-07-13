@@ -5,8 +5,8 @@ import time
 from constants import *
 
 
-#arduinoSerial = serial.Serial('COM4', 9600) #For Windows
-arduinoSerial = serial.Serial('/dev/ttyACM0', 9600) #For Linux
+arduinoSerial = serial.Serial('COM4', 9600) #For Windows
+#arduinoSerial = serial.Serial('/dev/ttyACM0', 9600) #For Linux
 
 
 previous_altitude = 0
@@ -31,7 +31,6 @@ def adapt_local_pressure(altGPS,alt):
             localQNH = SEALEVELPRESSURE + ((sum(altGPSArray) / len(altGPSArray)) - alt) * METERSOFAIRHETCOPASCAL
             heightCalibrated = round((localQNH - SEALEVELPRESSURE) * HETCOPASCALMETERSOFAIR, 1)
             calibrated = True  
-            print("CALIBRATEDDD")
 
 def vertical_speed(alt):
     global previous_altitude, previous_time
@@ -45,6 +44,9 @@ def vertical_speed(alt):
     previous_time = current_time
     
     vertical_speed = round(vertical_speed, 1)
+    
+    if vertical_speed == -0.0 or vertical_speed == 0.1 or vertical_speed == -0.1:
+        vertical_speed = 0.0
     return vertical_speed
 
 def data():

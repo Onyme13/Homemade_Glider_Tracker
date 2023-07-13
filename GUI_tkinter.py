@@ -285,8 +285,5 @@ def update_bat():
     pass
 
 
-#thread_update_data = threading.Thread(target=update_data)
-#thread_update_data.start()
-
 update_data()
 window.mainloop()

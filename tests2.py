@@ -1,8 +1,12 @@
-positions = ([23,46.0,8.3],[3,46.0,8.3])
-mouvement = []
-mouvement.append(positions[0][1:3])
-mouvement.append(positions[1][1:3])
+import random
 
-print(mouvement)
-alt_diff = positions[-1][0] - positions[-2][0]
-print(alt_diff)
+def generate_random_color():
+    red = random.randint(0, 255)
+    green = random.randint(0, 255)
+    blue = random.randint(0, 255)
+    color_hex = '#{:02x}{:02x}{:02x}'.format(red, green, blue)
+    return color_hex
+
+# Generate a random color
+color = generate_random_color()
+print("Random Color:", color)

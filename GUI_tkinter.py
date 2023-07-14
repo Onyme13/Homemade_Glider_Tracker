@@ -20,11 +20,15 @@ DISTANCE_THRESHOLD = 0.01 #If the distance between the two points is less than t
 position_list = []
 mouvement = []
 colors_list = ["#808080","#808080"]
+kill_count = 0
 
 
 def kill():
-    window.destroy()
-    exit()
+    global kill_count
+    kill_count += 1
+    if kill_count == 3:
+        window.destroy()
+        exit()
 
 
 window = Tk()

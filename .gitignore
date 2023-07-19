@@ -228,6 +228,7 @@ poetry.toml
 #Divers data folders
 data/
 tiles_Grey/
-tiles_Grey.zip/
-cpu_utilization.txt/
-
+tiles_Grey.zip
+data/last_pos.csv
+cpu_utilization.txt
+data/last_pos.csv

@@ -4,8 +4,9 @@ Code du Arduino pression barométrique et localisation. Latitude, longitude, alt
 Sortie: "latitude,longitude,vitesse,altitude,pression"
 système métriques
 
+Fonctionnne pour Arduino Uno et Micro
+
 TODO:
--peut-être changer la sortie baud de 9600 à 115200
 -commenter le code
 */
 
@@ -16,14 +17,14 @@ TODO:
 #include <SoftwareSerial.h>
 
 
-SoftwareSerial ss(3, 2); 
+SoftwareSerial ss(3, 2); // TX, RX
 TinyGPSPlus gps;
 Adafruit_BMP3XX bmp;
 
-#define BMP_SCK 13
-#define BMP_MISO 12
-#define BMP_MOSI 11 
-#define BMP_CS 10
+#define BMP_SCK 13 // SCK
+#define BMP_MISO 12 // SDO
+#define BMP_MOSI 11 // SDI
+#define BMP_CS 10 // CSB
 
 
 

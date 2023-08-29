@@ -22,7 +22,10 @@ Before starting the installation process, make sure you have all the necessary m
 7. Display (TFT screen 3.5")
 8. PiSugar Battery for Raspberry Pi-Zero W/WH 1200 mAh
 9. Cables and connectors
-10. Case to mount the components securely (Can be 3D printed)
+10. micro-USB to micro-USB cable
+11. Case to mount the components securely (Can be 3D printed).
+    You can find the .stl file for the case and the cover on this repository.
+(12. Two 2mm screws for closing the case, if 3D printed)
 
 See the Excel for more informations about all the necessary materials.
 
@@ -37,7 +40,7 @@ See the Excel for more informations about all the necessary materials.
 
 **Step 3: Install Required Software on the Raspberry PI using SSH**
 
-(This is probably the longest step of the installatio)
+(This is probably the longest step of the installation)
 
 1. Power up the Raspberry Pi.
 2. Connect to your Raspberry Pi through SSH with PuTTY. 
@@ -54,12 +57,19 @@ See the Excel for more informations about all the necessary materials.
     ```
 5. Go in to the file and install all needed python libraries by running:
     ```
+    sudo apt install python3-pip
     cd Research-Project
-    pip install -r requirements.txt
     ```
-6. Download the necessary map tiles for the GPS.
+    After installation of pip, you can verify that pip is installed by running. Then install the needed python libraries:
+    ```
+    pip --version
+    pip install -r requirements.txt
+    ```    
+6. Download the necessary map tiles for the GPS. 
+    TO DO
 
-7. File transfert the map zipped file using FileZilla.
+7. File transfert the map zipped file using FileZilla. Follow the steps from the image:
+    IMAGE
 
 8. Unzip the file by running on the Raspberry Pi:
     ```
@@ -73,13 +83,16 @@ See the Excel for more informations about all the necessary materials.
 
 1. Download the Arduino IDE from the official website
 2. Connect your microcontroller to your computer with USB
-3. Upload the Arduino_Double_Sensor.ino from this repository on the Arduino Micro with the Arduino IDE
+3. Upload the Arduino_Double_Sensor.ino from this repository on the Arduino Micro with the Arduino IDE using your computer.
 
 **Step 5: Assemble the Components**
-Carefully solder all the connectors following the schema. 
+Carefully solder all the connectors following the schema. Adapt the cabling according to your components.
+
+Follow the ***pdf steps.
+
 Double-check the schema (wiring diagram) to ensure you have a clear understanding of how the connectors should be soldered. The schema will show the connections between different components, such as sensors, displays, and microcontrollers.
 
-Carefully mount the Raspberry Pi, microcontroller, sensors, display, and other components inside the glider or case. Ensure that everything is securely fixed to prevent any movement during flight.
+Carefully mount the Raspberry Pi, microcontroller, sensors, display, and other components inside the case. 
 
 **Step 6: Test the Glider Computer Software**
 

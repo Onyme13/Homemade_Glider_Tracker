@@ -1,4 +1,6 @@
 import math
+import os
+import csv
 
 
 
@@ -44,9 +46,13 @@ def read_last_positon():
         lat,long = f.readline().split(",")
         return float(lat),float(long)
     
-def write_mouvement(alt,lat,long):
-    with open("data/mouvement.csv", "a") as f:
-        f.write(str(lat)+","+str(lat)+","+str(long))
+def write_mouvement(lat,long,alt,time):
+    if not os.path.exists("data/mouvement.csv"):
+        with open("data/mouvement.csv", "w") as f:
+            f.write("lat,long,alt,time")
+    with open("data/mouvement.csv", "a", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(str(lat)+","+str(long)+","+str(alt)+","+str(time))
 
 
 def read_mouvement():

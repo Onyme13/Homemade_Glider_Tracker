@@ -9,6 +9,8 @@ import threading
 import os
 from constants import *
 from data_simulation import *
+from tkinter import messagebox
+
 
 
 #TODO: add position to a JSON file  
@@ -82,6 +84,11 @@ window.minsize(width=320,height=480)
 
 window.geometry("320x480")
 window.config(background=BLACK)
+
+#Waring message
+
+messagebox.showinfo("WARNING", "This device is an experimental prototype and should only be used for testing purposes. It is not intended for flight-critical applications or navigation. Use at your own risk. The creators are not responsible for any accidents or damages resulting from its use. Prioritize safety and follow all aviation regulations during testing.")
+
 
 
 #First row 

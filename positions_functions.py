@@ -55,8 +55,3 @@ def write_mouvement(lat,long,alt,time):
         writer.writerow(str(lat)+","+str(long)+","+str(alt)+","+str(time))
 
 
-def read_mouvement():
-    with open("data/mouvement.csv", "r") as f:
-        alt,lat,long = f.readline().split(",")
-        return float(alt), float(lat),float(long)
-

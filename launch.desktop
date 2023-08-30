@@ -1,6 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Glider Tracker
-Exec=/usr/bin/lxterminal -e "bash -c '/home/onzme/Research-Project/startup.sh; exec bash'"
-Icon=/home/onzme/Research-Project/images/desktop_icon.png
-Terminal=false

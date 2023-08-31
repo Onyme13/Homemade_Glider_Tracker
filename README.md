@@ -71,7 +71,7 @@ For more information. Follow the [***.pdf](www.google.com) for more details. Pag
     pip --version
     ```
 
-    After installation of pip, you can verify that pip is installed by running. Then install the needed python libraries:
+    After installation of pip, you can verify that pip is installed. Then install the needed python libraries:
 
     ```
     cd Research-Project

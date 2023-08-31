@@ -27,56 +27,65 @@ Before starting the installation process, make sure you have all the necessary m
     You can find the .stl file for the case and the cover on this repository.
 (12. Two 2mm screws for closing the case, if 3D printed)
 
-See the Excel for more informations about all the necessary materials.
+See the [Required Materials](www.google.com) for more informations about all the necessary materials.
 
 **Step 2: Set Up the Raspberry Pi**
 
+For more information. Follow the [***.pdf](www.google.com) for more details. Pages XX to XX
+
 1. Download the latest Raspberry Pi OS Imager from the official website.
 2. Flash the OS image onto a microSD. In the Advanced option, enable SSH for remote connection. It is the only way to access to the Pi.
-3. Download PuTTY - a free SSH and telnet client for Windows. (Or any other SSH solution)
-4. Download FileZilla - The free File Transfert Protocol solution. You need this to upload your GPS map to the Pi.
-5. Insert the microSD card into the Raspberry Pi.
+3. Download Advanced IP Scanner from the official website.
+4. Download PuTTY - a free SSH and telnet client for Windows. (Or any other SSH solution)
+5. Download FileZilla - The free File Transfert Protocol solution. You need this to upload your GPS map to the Pi.
+5. Setup the Raspeberry Pi OS . Follow the [***.pdf] guide. Pages XX to XX
+6. Insert the microSD card into the Raspberry Pi.
 
 
 **Step 3: Install Required Software on the Raspberry PI using SSH**
 
+For more information. Follow the [***.pdf](www.google.com) for more details. Pages XX to XX
+
 (This is probably the longest step of the installation)
 
-1. Power up the Raspberry Pi.
-2. Connect to your Raspberry Pi through SSH with PuTTY. 
 
-3. Update the Raspberry Pi OS by running:
+1. Power up the Raspberry Pi.
+
+2. Scan all the IP's from your network with Advanced IP Scanner so you can the Raspberry Pi's IP address.
+
+3. With the now found IP adress. Connect to your Raspberry Pi through SSH with PuTTY. 
+
+4. Update the Raspberry Pi OS by running:
    ```
    sudo apt-get update
    sudo apt-get upgrade
    ```
 
-4. Clone the git repository by running.
+5. Clone the git repository by running.
     ```
-    git clone https://github.com/Onyme13/Research-Project.git
+    git clone https://github.com/Onyme13/Homemade_Glider_Tracker.git
     ```
-5. Go in to the file and install all needed python libraries by running:
+6. Go in to the file and install all needed python libraries by running:
     ```
     sudo apt install python3-pip
     cd Research-Project
     ```
+
     After installation of pip, you can verify that pip is installed by running. Then install the needed python libraries:
+
     ```
     pip --version
     pip install -r requirements.txt
     ```    
-6. Download the necessary map tiles for the GPS. 
-    TO DO
 
-7. File transfert the map zipped file using FileZilla. Follow the steps from the image:
-    IMAGE
+7. File transfert the map zipped file using FileZilla.
 
 8. Unzip the file by running on the Raspberry Pi:
     ```
     sudo apt install unzip
-    unzip ***file***
-    ``
-...... TO DO 
+    unzip tile_OSM.zip
+    ```
+    ...... TO DO 
 
 
 **Step 4: Set Up the Microcontroller Arduino Micro**
@@ -88,7 +97,7 @@ See the Excel for more informations about all the necessary materials.
 **Step 5: Assemble the Components**
 Carefully solder all the connectors following the schema. Adapt the cabling according to your components.
 
-Follow the ***pdf steps.
+Follow the [***pdf] steps.
 
 Double-check the schema (wiring diagram) to ensure you have a clear understanding of how the connectors should be soldered. The schema will show the connections between different components, such as sensors, displays, and microcontrollers.
 
@@ -161,4 +170,5 @@ Screenshots of your project.
 
 ## Further Reading
 
-Links to Faclab... TODO
+1. [FacLab article](https://faclab.ch/publication/developpement-dun-tracker-de-vol-fait-maison-pour-planeurs)
+2.

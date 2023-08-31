@@ -17,7 +17,8 @@ TODO:
 #include <SoftwareSerial.h>
 
 
-SoftwareSerial ss(3, 2); // TX, RX
+//SoftwareSerial ss(3, 2); // TX, RX, for Arduino UNO ONLY !
+SoftwareSerial ss(8, 9); // RXD, TXD
 TinyGPSPlus gps;
 Adafruit_BMP3XX bmp;
 
@@ -39,9 +40,10 @@ void setup() {
 
   while(!Serial){
   }
+  /*
   //commencer le setup pour le baromètre    
   if (! bmp.begin_SPI(BMP_CS, BMP_SCK, BMP_MISO, BMP_MOSI)) {  
-    Serial.println("Could not find a valid BMP3 sensor, check wiring!");
+     Serial.println("Could not find a valid BMP3 sensor, check wiring!");
     while (1);
   }
 
@@ -50,8 +52,8 @@ void setup() {
   bmp.setIIRFilterCoeff(BMP3_IIR_FILTER_COEFF_3);
   bmp.setOutputDataRate(BMP3_ODR_50_HZ);
 
+*/
 }
-
 void loop() {
   while (ss.available() > 0) 
     if (gps.encode(ss.read())){
@@ -66,12 +68,13 @@ void loop() {
 //-----------------------------------------------------------------------------------------------//
 
 void vert_speed(){
+  /*
   if (! bmp.performReading()) {
   Serial.println("Failed to perform reading :(");
   return;
   }
-  
   Serial.print(bmp.readAltitude(SEALEVELPRESSURE_HPA));
+  */
     
 }
 

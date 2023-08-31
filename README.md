@@ -170,5 +170,6 @@ Screenshots of your project.
 
 ## Further Reading
 
-1. [FacLab article](https://faclab.ch/publication/developpement-dun-tracker-de-vol-fait-maison-pour-planeurs)
+FacLab articles
+1. [Développement d'un Tracker de Vol Fait Maison pour Planeurs](https://faclab.ch/publication/developpement-dun-tracker-de-vol-fait-maison-pour-planeurs)
 2.

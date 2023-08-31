@@ -68,13 +68,13 @@ For more information. Follow the [***.pdf](www.google.com) for more details. Pag
 6. Go in to the file and install all needed python libraries by running:
     ```
     sudo apt install python3-pip
-    cd Research-Project
+    pip --version
     ```
 
     After installation of pip, you can verify that pip is installed by running. Then install the needed python libraries:
 
     ```
-    pip --version
+    cd Research-Project
     pip install -r requirements.txt
     ```    
 

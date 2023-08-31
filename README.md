@@ -65,7 +65,7 @@ For more information. Follow the [***.pdf](www.google.com) for more details. Pag
     ```
     git clone https://github.com/Onyme13/Homemade_Glider_Tracker.git
     ```
-6. Go in to the file and install all needed python libraries by running:
+6. Install Pip and go in to the file and install all needed python libraries by running:
     ```
     sudo apt install python3-pip
     pip --version

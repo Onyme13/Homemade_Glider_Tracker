@@ -274,7 +274,8 @@ def update_data():
     #Location update
     if latitude!= 0 and longitude!= 0:
         update_position(altitude,latitude,longitude,speed) #update position for UI
-        write_last_positon(latitude,longitude) #write the last known position to a file 
+        write_last_positon(latitude,longitude) #write the last known position to a file
+        write_mouvement(latitude,longitude,altitude,current_time) #write the last known position to a file 
     else:
         latitude, longitude = read_last_positon()
         update_position(altitude,latitude,longitude,speed)  # If no data is available, set the position to the last known position for preloading of the map

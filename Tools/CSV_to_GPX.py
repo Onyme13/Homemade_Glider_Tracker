@@ -1,3 +1,6 @@
+"""Function that creates a gpx file from a csv file. For a GPS Visualizer like https://www.gpsvisualizer.com/"""
+
+
 import csv
 import xml.etree.ElementTree as ET
 import datetime

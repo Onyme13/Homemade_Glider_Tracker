@@ -49,9 +49,11 @@ def read_last_positon():
 def write_mouvement(lat,long,alt,time):
     if not os.path.exists("data/mouvement.csv"):
         with open("data/mouvement.csv", "w") as f:
-            f.write("lat,long,alt,time")
-    with open("data/mouvement.csv", "a", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow(str(lat)+","+str(long)+","+str(alt)+","+str(time))
+            f.write("lat,long,alt,time\n")
+    with open("data/mouvement.csv", "a") as f:
+        f.write(str(lat)+","+str(long)+","+str(alt)+","+str(time)+"\n")
+        f.close()
+        
+        
 
 

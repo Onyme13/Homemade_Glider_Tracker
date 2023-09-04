@@ -39,8 +39,9 @@ def toggle_fullscreen(event=None):
 
 window.bind('<F11>', toggle_fullscreen)
 window.bind('<Escape>', toggle_fullscreen)
+
 # Start the application in full-screen mode
-window.attributes('-fullscreen', False) # True for full-screen
+window.attributes('-fullscreen', True) # True for full-screen
 
 window.title('GPS')
 window.minsize(width=320,height=480)

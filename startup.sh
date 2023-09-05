@@ -2,7 +2,7 @@
 
 sleep 5
 
-cd Research-Project
+cd Homemade_Glider_Tracker
 
 sleep 1
 

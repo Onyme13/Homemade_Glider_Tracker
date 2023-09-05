@@ -34,7 +34,6 @@ def orient(position_list):
 
 
 
-"""
 #function that stores the last known postion in CSV file
 def write_last_positon(lat,long):
     with open("data/last_pos.csv", "w") as f:
@@ -45,8 +44,7 @@ def read_last_positon():
     with open("data/last_pos.csv", "r") as f:
         lat,long = f.readline().split(",")
         return float(lat),float(long)
-"""
- 
+
 def write_mouvement(lat,long,alt,time):
     if not os.path.exists("data/mouvement.csv"):
         with open("data/mouvement.csv", "w") as f:

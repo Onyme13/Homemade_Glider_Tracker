@@ -1,12 +1,15 @@
+# Test file number one
+from positions_functions import *
 import random
+import time
 
-def generate_random_color():
-    red = random.randint(0, 255)
-    green = random.randint(0, 255)
-    blue = random.randint(0, 255)
-    color_hex = '#{:02x}{:02x}{:02x}'.format(red, green, blue)
-    return color_hex
+# Test 1
 
-# Generate a random color
-color = generate_random_color()
-print("Random Color:", color)
+while True:
+    #generate random latitude and longitude
+    lat = random.uniform(0, 90)
+    long = random.uniform(0, 90)
+    write_mouvement(lat, long, 0, 0)
+
+    time.sleep(1)
+    print("Waiting...")

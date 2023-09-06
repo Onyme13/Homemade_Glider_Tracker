@@ -1,6 +1,7 @@
 # Homemade Glider Computer (Work in progress)
 
-A homemade glider computer. Using a GPS and barometric sensor. Computing is made on Raspberry Pi.
+In the world of light aviation and air sports, gliders occupy a special place because of their dependence on the weather and their ability to slide silently across the skies. To improve the flying experience of gliders and provide pilots with essential data in real time, My bachelor’s degree research project in Information Systems and Service Science focused on the design and implementation of a prototype homemade flight tracker specifically designed for these aircraft.
+
 
 **WARNING: PROTOTYPE**
 
@@ -27,7 +28,7 @@ Before starting the installation process, make sure you have all the necessary m
     You can find the .stl file for the case and the cover on this repository.
 (12. Two 2mm screws for closing the case, if 3D printed)
 
-See the [Required Materials](www.google.com) for more informations about all the necessary materials.
+See the [Required Materials](https://github.com/Onyme13/Homemade_Glider_Tracker/tree/main/Documentation) for more informations about all the necessary materials.
 
 **Step 2: Set Up the Raspberry Pi**
 
@@ -85,7 +86,26 @@ For more information. Follow the [***.pdf](www.google.com) for more details. Pag
     sudo apt install unzip
     unzip tile_OSM.zip
     ```
-    ...... TO DO 
+9. Meanwhile configure the screen by activating SPI connection on the by, run:
+    ``` 
+    sudo raspi-config
+    ```
+10. Then run:
+    ```
+      sudo rm -rf LCD-show
+
+   git clone https://github.com/MrYacha/LCD-show.git
+
+   chmod -R 755 LCD-show
+
+   cd LCD-show/
+    ```
+    and 
+    ```
+    sudo ./LCD35-show
+    ```
+    The Pi will reboot, the screen shoulb correctly configured
+
 
 
 **Step 4: Set Up the Microcontroller Arduino Micro**

@@ -1,3 +1,5 @@
+"""Copy of the main application. For demonstration on a PC only"""
+
 from tkinter import * 
 from tkinter import ttk 
 import datetime
@@ -12,8 +14,6 @@ from data_simulation import *
 from tkinter import messagebox
 
 
-
-#TODO: add position to a JSON file  
 
 
 #########################FOR SIMULATION####################

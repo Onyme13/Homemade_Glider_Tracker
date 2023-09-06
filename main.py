@@ -1,3 +1,5 @@
+"""Main file that processes raw data from the Arduino"""
+
 import serial
 from datetime import datetime
 import itertools
@@ -17,6 +19,7 @@ heightCalibrated = 0
 calibrated = False  
 localQNH = 0
 
+#If the GPS altitude is similar 20 times in raw. Adapt the barometer to local QNH
 def adapt_local_pressure(altGPS,alt):
     global localQNH
     global heightCalibrated
@@ -32,6 +35,7 @@ def adapt_local_pressure(altGPS,alt):
             heightCalibrated = round((localQNH - SEALEVELPRESSURE) * HETCOPASCALMETERSOFAIR, 1)
             calibrated = True  
 
+#Verical speed calculated from a Delta between time and height
 def vertical_speed(alt):
     global previous_altitude, previous_time
     current_time = time.time()
@@ -45,10 +49,12 @@ def vertical_speed(alt):
     
     vertical_speed = round(vertical_speed, 1)
     
-    if vertical_speed == -0.0 or vertical_speed == 0.1 or vertical_speed == -0.1:
+    # If the vertical speed is too small, set it to 0.0
+    if vertical_speed == -0.0 or vertical_speed == 0.1 or vertical_speed == -0.1 or vertical_speed == 0.2 or vertical_speed == -0.2:
         vertical_speed = 0.0
     return vertical_speed
 
+#Transform raw data into JSON
 def data():
     #time.sleep(1)
     while arduinoSerial.inWaiting() == 0:

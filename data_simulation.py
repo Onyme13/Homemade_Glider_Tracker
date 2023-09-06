@@ -14,5 +14,6 @@ def simulate_gps_position(latitude, longitude):
     latitude = round(latitude, 6)
     longitude = round(longitude, 6)
     
+    # Return the new latitude and longitude values
     return latitude, longitude
 

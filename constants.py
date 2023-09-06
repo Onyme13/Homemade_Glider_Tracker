@@ -1,3 +1,5 @@
+"""Python file containing constants for performance optimisation"""
+
 #UI
 BLACK = '#000000'
 WHITE = '#FFFFFF'

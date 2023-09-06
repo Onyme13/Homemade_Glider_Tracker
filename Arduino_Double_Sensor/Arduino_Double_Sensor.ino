@@ -1,7 +1,7 @@
 /*
 Code du Arduino pression barométrique et localisation. Latitude, longitude, altitude.
 
-Sortie: "latitude,longitude,vitesse,altitude,pression"
+Sortie: "latitude,longitude,vitesse,altitude, altitude pression"
 système métriques
 
 Testé avec Arduino Uno et Arduino Micro
@@ -20,6 +20,7 @@ SoftwareSerial ss(9, 8); // RXD, TXD --> for Arduino Micro
 TinyGPSPlus gps;
 Adafruit_BMP3XX bmp;
 
+//Wiring for the barometer
 #define BMP_SCK 13 // SCK
 #define BMP_MISO 6 // SDO
 #define BMP_MOSI 11 // SDI
@@ -57,12 +58,12 @@ void loop() {
     if (gps.encode(ss.read())){
       gps_loc();
     }
-  //gps_location();
   vert_speed();
   Serial.println();
   delay(250);
 }
 
+//Function de sortie
 //-----------------------------------------------------------------------------------------------//
 
 void vert_speed(){

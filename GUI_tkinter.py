@@ -9,7 +9,6 @@ from constants import *
 from data_simulation import *
 
 
-#TODO: add position to a JSON file  
 
 
 SPEED_THRESHOLD = 0 #km/h modify value for testing
@@ -22,7 +21,7 @@ mouvement = []
 colors_list = ["#808080","#808080"]
 kill_count = 0
 
-
+# If the button is hit 3 times, the program will close
 def kill():
     global kill_count
     kill_count += 1
@@ -33,6 +32,7 @@ def kill():
 
 window = Tk()
 
+# Toggle full-screen mode
 def toggle_fullscreen(event=None):
     state = window.attributes('-fullscreen')
     window.attributes('-fullscreen', not state)
@@ -51,7 +51,7 @@ window.geometry("320x480")
 window.config(background=BLACK)
 
 
-#First row 
+#=== First row of the UI =======================================
 image_sats = Image.open('images/satellite.png')
 image_sats = ImageTk.PhotoImage(image_sats)
 label_image_sats = Label(window, image=image_sats,background=BLACK)
@@ -78,37 +78,39 @@ image_batterie = ImageTk.PhotoImage(image_batterie)
 label_image_batterie = Label(window, image=image_batterie,background=BLACK)
 label_image_batterie.grid(row=0, column=8)
 
-#Second row
+#=== Second row of the UI =======================================
 
+#Old code that used a local database instead of a tile server
 #script_directory = os.path.dirname(os.path.abspath(__file__))
 #database_path = os.path.join(script_directory, "data/MAP_GREY.db") 
+#map_widget = tkintermapview.TkinterMapView(window, width=320, height=370,use_database_only=True, database_path=database_path)
 
+
+# Create the map widget, and the tile server request
 map_widget = tkintermapview.TkinterMapView(window, width=320, height=370,use_database_only=False, database_path=None)
 map_widget.set_tile_server("http://127.0.0.1:5000/tiles/{z}/{x}/{y}.png", max_zoom=22)
 
-#map_widget = tkintermapview.TkinterMapView(window, width=320, height=370,use_database_only=True, database_path=database_path)
+
 map_widget.grid(row=2,rowspan=6,column=0,columnspan=9)
 x, y = read_last_positon()
-map_widget.set_position(x,y)  #  If no data is available, set the position to the last known position for preloading of the map
+map_widget.set_position(x,y)  #  If no data is available, set the position to the last known position for preloading of the map. Optimisation for the map loading
 map_widget.set_zoom(14) 
-map_widget.max_zoom = 14
-map_widget.min_zoom = 9
+map_widget.max_zoom = 14 # Limit the zoom level to 14
+map_widget.min_zoom = 9 # Limit the zoom level to 9
 
 
 
-#Third row
+#=== Third row of the UI =======================================
 label_alt_text = Label(window, text="ALT",fg=WHITE,background=BLACK,font=FONT)
 label_alt_text.grid(row=8, column=0,columnspan=2)
 label_alt = Label(window, text="0000 m",fg=WHITE,background=BLACK,font=FONT)
 label_alt.grid(row=9, column=0,columnspan=2)
 
 
-
 label_therm_text = Label(window, text="V/S.",fg=WHITE,background=BLACK,font=FONT)
 label_therm_text.grid(row=8, column=3,columnspan=2)
 label_therm = Label(window, text="00 m/s",fg=WHITE,background=BLACK,font=FONT)
 label_therm.grid(row=9, column=3,columnspan=2)
-
 
 
 label_speed_text = Label(window, text="SPEED",fg=WHITE,background=BLACK,font=FONT)
@@ -120,19 +122,26 @@ image_settings = PhotoImage(file="images/settings.png")
 settings_button = Button(window,image=image_settings,bg=BLACK,command=kill)
 settings_button.grid(row=8, rowspan=2 ,column=7,columnspan=1)
 
+#================================================================================
+
 #Initialisation of the path, make it as small as possible
 x, y, = read_last_positon() 
 x1, y1 = x+0.0001, y+0.0001
 path = map_widget.set_path([(x, y),(x1,y1)],colors=colors_list, width=2)
 
+# Function that updates the path drawing on the map
 def update_path(mouvement):
     global path
     
+    #Calculate the altitude difference between the last two points
     alt_diff = position_list[-1][0] - position_list[-2][0]
   
+    #Change the color of the path depending on the altitude difference
     color = map_value_to_color(alt_diff)
+    #Add the new point to the path
     path.add_position(mouvement[-1][0],mouvement[-1][1],color=color)
 
+# Function that calculates the distance between two points, this will be used later to determine if the plane is moving or not
 def calculate_distance(current_position, prevous_position):
     lat1, lon1 = current_position
     lat2, lon2 = prevous_position
@@ -144,7 +153,7 @@ def calculate_distance(current_position, prevous_position):
     distance = earth_radius * c
     return distance
 
-
+# Function that updates the position of the glider icon on the map
 def update_position(alt,lat,long,speed):
 
     global position_list
@@ -169,21 +178,19 @@ def update_position(alt,lat,long,speed):
 
             current_position = mouvement[-1]
             prevous_position = mouvement[-2]
-
+            
+            # Udapte only if the distance between the two points is greater than the threshold value
             distance = calculate_distance(current_position, prevous_position)
 
             threshold = DISTANCE_THRESHOLD
             if distance > threshold:
                 update_path(mouvement)
-    #print(position_list)
-
-
+    ###
 
     #Change glider icon orientation 
     glider = Image.open('images/glider.png').resize((25,25)).rotate(orient(position_list))
     glider = ImageTk.PhotoImage(glider)
 
-    #map_widget.delete_all_marker()
     map_widget.canvas_marker_list = map_widget.canvas_marker_list[:-2] #only keep the last two markers for clarity
 
     map_widget.set_position(lat, long, marker=True, icon=glider)
@@ -195,9 +202,9 @@ def update_position(alt,lat,long,speed):
 def map_value_to_color(value):
 
     color_scale = {
-        -5: (0, 0, 1),   # Blue
-        0: (1, 1, 1),    # White
-        5: (1, 0, 0)     # Red
+        -5: (0, 0, 1),   # Blue for null values
+        0: (1, 1, 1),    # Gree for positive values
+        5: (1, 0, 0)     # Red for negative values
     }
 
     closest_values = sorted(color_scale.keys(), key=lambda x: abs(x - value))[:2]
@@ -215,13 +222,10 @@ def map_value_to_color(value):
 
           
 
-
+# Function that updates the data on the UI
 def update_data():
     global init
     global latitude_old, longitude_old
-
-
-    #write_cpu_utilization('cpu_utilization.txt')
 
 
 

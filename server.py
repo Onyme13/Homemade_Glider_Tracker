@@ -7,8 +7,8 @@ app = Flask(__name__)
 
 @app.route('/tiles/<int:z>/<int:x>/<int:y>.png')
 def get_tile(z,x,y):
-    filename = f'tiles_Grey/{z}/{x}/{y}.png'
-    #filename = f'tiles_OSM/{z}/{x}/{y}.png'
+    #filename = f'tiles_Grey/{z}/{x}/{y}.png'
+    filename = f'tiles_OSM/{z}/{x}/{y}.png'
     if os.path.exists(filename):
         return send_file(filename, mimetype='image/png')
     else:

@@ -2,13 +2,12 @@
 
 from tkinter import * 
 from tkinter import ttk 
-import datetime
-from main import *
+from datetime import datetime
+#import datetime
+#from main import *
 from positions_functions import *
 import tkintermapviewglider as tkintermapview
 from PIL import Image, ImageTk
-import threading
-import os
 from constants import *
 from data_simulation import *
 from tkinter import messagebox
@@ -85,9 +84,9 @@ window.minsize(width=320,height=480)
 window.geometry("320x480")
 window.config(background=BLACK)
 
-#Waring message
+#Waring message (decomment for testing)
 
-messagebox.showinfo("WARNING", "This device is an experimental prototype and should only be used for testing purposes. It is not intended for flight-critical applications or navigation. Use at your own risk. The creators are not responsible for any accidents or damages resulting from its use. Prioritize safety and follow all aviation regulations during testing.")
+#messagebox.showinfo("WARNING", "This device is an experimental prototype and should only be used for testing purposes. It is not intended for flight-critical applications or navigation. Use at your own risk. The creators are not responsible for any accidents or damages resulting from its use. Prioritize safety and follow all aviation regulations during testing.")
 
 
 
@@ -282,17 +281,17 @@ def update_data():
         "alt": 0
     """
 
-    my_data = data()
+    #my_data = data()
 
     # Get the latest data values
     current_time = datetime.now()
     current_time = current_time.strftime("%H:%M:%S")
 
-    altitude = my_data['alt']
-    speed = my_data['speed']
-    vert_speed = my_data['vert'] #vertical_speed(my_data['alt'])
-    satellites = my_data['sat']
-    localQNH = my_data['localQNH']   
+    altitude = simulate_altitude()
+    speed = 98 #my_data['speed']
+    vert_speed = 0 #my_data['vert'] #vertical_speed(my_data['alt'])
+    satellites = 0 #my_data['sat']
+    localQNH = 1013 #my_data['localQNH']   
 
     if init == True:
         latitude, longitude = simulate_gps_position(latitude_init,longitude_init)

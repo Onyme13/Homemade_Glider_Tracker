@@ -17,3 +17,12 @@ def simulate_gps_position(latitude, longitude):
     # Return the new latitude and longitude values
     return latitude, longitude
 
+def simulate_altitude():
+    # Simulate the altitude of the plane by adding small random changes
+    altitude = random.uniform(1000, 1100)
+    
+    # Round the altitude value to 2 decimal places
+    altitude = round(altitude, 2)
+    
+    # Return the new altitude value
+    return altitude

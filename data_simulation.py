@@ -1,3 +1,5 @@
+""" Function that simulates latitudes and longitudes position for demonstration only. The speed simulated is about 100km/h"""
+
 import random
 import time
 

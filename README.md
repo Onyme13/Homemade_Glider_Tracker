@@ -180,7 +180,7 @@ For any questions, feel free to contact me at this email adress: jocorl@hotmailc
 
 ## Photos
 
-Screenshots of your project.
+![](/images/readme/log1.jpg "Optional title")
 
 ## Further Reading
 

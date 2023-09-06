@@ -1,4 +1,4 @@
-# Homemade Glider Computer
+# Homemade Glider Computer (Work in progress)
 
 A homemade glider computer. Using a GPS and barometric sensor. Computing is made on Raspberry Pi.
 

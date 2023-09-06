@@ -32,20 +32,20 @@ See the [Required Materials](https://github.com/Onyme13/Homemade_Glider_Tracker/
 
 **Step 2: Set Up the Raspberry Pi**
 
-For more information. Follow the [***.pdf](www.google.com) for more details. Pages XX to XX
+For more information. Follow the [Manuel_de_reproduction_FR.pdf](https://github.com/Onyme13/Homemade_Glider_Tracker/blob/main/Documentation/Manuel_de_reproduction_FR.pdf) for more details. Pages 6 to 11
 
 1. Download the latest Raspberry Pi OS Imager from the official website.
 2. Flash the OS image onto a microSD. In the Advanced option, enable SSH for remote connection. It is the only way to access to the Pi.
 3. Download Advanced IP Scanner from the official website.
 4. Download PuTTY - a free SSH and telnet client for Windows. (Or any other SSH solution)
 5. Download FileZilla - The free File Transfert Protocol solution. You need this to upload your GPS map to the Pi.
-5. Setup the Raspeberry Pi OS . Follow the [***.pdf] guide. Pages XX to XX
+5. Setup the Raspeberry Pi OS . Follow the [Manuel_de_reproduction_FR.pdf] guide. Pages 7 to 10
 6. Insert the microSD card into the Raspberry Pi.
 
 
 **Step 3: Install Required Software on the Raspberry PI using SSH**
 
-For more information. Follow the [***.pdf](www.google.com) for more details. Pages XX to XX
+For more information. Follow the [Manuel_de_reproduction_FR.pdf](https://github.com/Onyme13/Homemade_Glider_Tracker/blob/main/Documentation/Manuel_de_reproduction_FR.pdf) for more details. Pages 12 to 17
 
 (This is probably the longest step of the installation)
 
@@ -114,7 +114,7 @@ For more information. Follow the [***.pdf](www.google.com) for more details. Pag
 **Step 5: Assemble the Components**
 Carefully solder all the connectors following the schema. Adapt the cabling according to your components.
 
-Follow the [***pdf] steps.
+Follow the [Manuel_de_reproduction_FR.pdf](https://github.com/Onyme13/Homemade_Glider_Tracker/blob/main/Documentation/Manuel_de_reproduction_FR.pdf) steps.
 
 Double-check the schema (wiring diagram) to ensure you have a clear understanding of how the connectors should be soldered. The schema will show the connections between different components, such as sensors, displays, and microcontrollers.
 

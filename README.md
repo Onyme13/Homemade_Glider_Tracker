@@ -182,7 +182,7 @@ For any questions, feel free to contact me at this email adress: jocorl@hotmailc
 
 ![](/images/readme/log1.jpg "Software glimpse")
 
-![](/images/readme/art1.jpg "Artefact glimpse")
+![](/images/readme/art1.jpg "Artefact glimpse" =100x20)
 
 ## Further Reading
 

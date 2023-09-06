@@ -180,7 +180,9 @@ For any questions, feel free to contact me at this email adress: jocorl@hotmailc
 
 ## Photos
 
-![](/images/readme/log1.jpg "Optional title")
+![](/images/readme/log1.jpg "Software glimpse")
+
+![](/images/readme/art1.jpg "Artefact glimpse")
 
 ## Further Reading
 

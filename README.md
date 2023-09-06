@@ -182,8 +182,7 @@ For any questions, feel free to contact me at this email adress: jocorl@hotmailc
 
 <img src="/images/readme/log1.jpg" width="200">
 
-
-![](/images/readme/art1.jpg  =250x250)
+<img src="/images/readme/art1.jpg" width="200">
 
 ## Further Reading
 

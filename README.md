@@ -92,17 +92,14 @@ For more information. Follow the [***.pdf](www.google.com) for more details. Pag
     ```
 10. Then run:
     ```
-      sudo rm -rf LCD-show
-
-       git clone https://github.com/MrYacha/LCD-show.git
-
-       chmod -R 755 LCD-show
-
-       cd LCD-show/
+    sudo rm -rf LCD-show
+    git clone https://github.com/MrYacha/LCD-show.git
+    chmod -R 755 LCD-show
+    cd LCD-show/
     ```
     and 
     ```
-        sudo ./LCD35-show
+    sudo ./LCD35-show
     ```
     The Pi will reboot, the screen should be correctly configured
 

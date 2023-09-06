@@ -66,27 +66,27 @@ For more information. Follow the [***.pdf](www.google.com) for more details. Pag
     ```
     git clone https://github.com/Onyme13/Homemade_Glider_Tracker.git
     ```
-6. Install Pip and go in to the file and install all needed python libraries by running:
+6. Install Pip and go in to the file. After installation of pip, you can verify that pip is installed:
     ```
     sudo apt install python3-pip
     pip --version
     ```
 
-    After installation of pip, you can verify that pip is installed. Then install the needed python libraries:
+   Then install the needed python libraries:
 
     ```
     cd Research-Project
     pip install -r requirements.txt
     ```    
 
-7. File transfert the map zipped file using FileZilla.
+7. File transfert the map zipped file using FileZilla (this step can take more than hour).
 
-8. Unzip the file by running on the Raspberry Pi:
+8. Unzip the file by running on the Raspberry Pi (this step can take more than hour):
     ```
     sudo apt install unzip
     unzip tile_OSM.zip
     ```
-9. Meanwhile configure the screen by activating SPI connection on the by, run:
+9. Meanwhile configure the screen by activating SPI connection on the Pi, run:
     ``` 
     sudo raspi-config
     ```
@@ -94,17 +94,17 @@ For more information. Follow the [***.pdf](www.google.com) for more details. Pag
     ```
       sudo rm -rf LCD-show
 
-   git clone https://github.com/MrYacha/LCD-show.git
+       git clone https://github.com/MrYacha/LCD-show.git
 
-   chmod -R 755 LCD-show
+       chmod -R 755 LCD-show
 
-   cd LCD-show/
+       cd LCD-show/
     ```
     and 
     ```
-    sudo ./LCD35-show
+        sudo ./LCD35-show
     ```
-    The Pi will reboot, the screen shoulb correctly configured
+    The Pi will reboot, the screen should be correctly configured
 
 
 
@@ -127,7 +127,7 @@ Carefully mount the Raspberry Pi, microcontroller, sensors, display, and other c
 
 Verify that the software is working as expected. Make sure the data from sensors are accurate, the display shows the relevant information correctly, and the system behaves as intended.
 
-**Step 7: Test the Glider Computer in Flight**
+**Step 7: Test the Glider Computer**
 
 ALWAYS PRIORITIZE THE FLIGHT SAFETY.
 KEEP YOUR EYES OUT OF THE PLANE.
@@ -143,9 +143,6 @@ During and after the flight, closely monitor the glider computer's performance. 
 
 Remember to always prioritize safety and adhere to local regulations.
 
-## Usage
-
-Instructions on how to use your project.
 
 ## Contributing
 

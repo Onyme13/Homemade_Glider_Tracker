@@ -180,7 +180,8 @@ For any questions, feel free to contact me at this email adress: jocorl@hotmailc
 
 ## Photos
 
-![](/images/readme/log1.jpg "Software glimpse")
+<img src="/images/readme/log1.jpg" width="200">
+
 
 ![](/images/readme/art1.jpg  =250x250)
 

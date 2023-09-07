@@ -234,3 +234,5 @@ data/last_pos.csv
 cpu_utilization.txt
 data/last_pos.csv
 data/mouvement.csv
+tests.py
+tests2.py

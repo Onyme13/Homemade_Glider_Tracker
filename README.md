@@ -192,4 +192,4 @@ For any questions, feel free to contact me at this email adress: jocorl@hotmailc
 
 FacLab articles
 1. [Développement d'un Tracker de Vol Fait Maison pour Planeurs](https://faclab.ch/publication/developpement-dun-tracker-de-vol-fait-maison-pour-planeurs)
-2.
+2.[Tests et conclusion du travail de Bachelor du Tracker de Vol Fait Maison pour Planeurs](https://faclab.ch/publication/tests-et-conclusion-du-travail-de-bachelor-du-tracker-de-vol-fait-maison-pour-planeurs)

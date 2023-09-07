@@ -184,6 +184,10 @@ For any questions, feel free to contact me at this email adress: jocorl@hotmailc
 
 <img src="/images/readme/art1.jpg" width="200">
 
+<img src="/images/readme/test1.jpg" width="200">
+
+<img src="/images/readme/test2.jpg" width="200">
+
 ## Further Reading
 
 FacLab articles

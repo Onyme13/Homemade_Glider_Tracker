@@ -76,7 +76,7 @@ For more information. Follow the [Manuel_de_reproduction_FR.pdf](https://github.
 
     ```
     cd Research-Project
-    pip install -r requirements.txt
+    sudo python -m pip install -r requirements.txt
     ```    
 
 7. File transfert the map zipped file using FileZilla (this step can take more than hour).

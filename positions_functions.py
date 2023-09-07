@@ -1,7 +1,7 @@
 """File that has multiple functions in link with the position of the glider"""
 import math
 import os
-
+import datetime
 
 
 
@@ -47,10 +47,14 @@ def read_last_positon():
 
 # Function that writes positions in a csv file for later flight position analysis
 def write_mouvement(lat,long,alt,time):
-    if not os.path.exists("data/mouvement.csv"):
-        with open("data/mouvement.csv", "w") as f:
+    current_date = datetime.datetime.now().date()
+
+    formatted_date = current_date.strftime("%Y-%m-%d")
+    file_name = "mouvment_"+formatted_date+".csv"
+    if not os.path.exists("data/"+file_name):
+        with open("data/"+file_name, "w") as f:
             f.write("lat,long,alt,time\n")
-    with open("data/mouvement.csv", "a") as f:
+    with open("data/"+file_name, "a") as f:
         f.write(str(lat)+","+str(long)+","+str(alt)+","+str(time)+"\n")
         f.close()
         

@@ -3,7 +3,7 @@
 from tkinter import * 
 from tkinter import ttk 
 from datetime import datetime
-#import datetime
+import datetime
 #from main import *
 from positions_functions import *
 import tkintermapviewglider as tkintermapview
@@ -284,7 +284,7 @@ def update_data():
     #my_data = data()
 
     # Get the latest data values
-    current_time = datetime.now()
+    current_time = datetime.datetime.now()
     current_time = current_time.strftime("%H:%M:%S")
 
     altitude = simulate_altitude()

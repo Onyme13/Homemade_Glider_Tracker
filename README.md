@@ -86,11 +86,14 @@ For more information. Follow the [Manuel_de_reproduction_FR.pdf](https://github.
     sudo apt install unzip
     unzip tile_OSM.zip
     ```
-9. Meanwhile configure the screen by activating SPI connection on the Pi, run:
+9. Meanwhile configure the screen by activating SPI connection on the Pi and disable Sleep Mode , run:
     ``` 
     sudo raspi-config
     ```
-10. Then run:
+10. Navigate to Display Options, and press enter.
+11. Navigate to the 4th line, Screen Blanking. Press Enter and select No.
+12. Activate the SPI connection on the same menu.
+13. Then run:
     ```
     sudo rm -rf LCD-show
     git clone https://github.com/MrYacha/LCD-show.git

@@ -91,7 +91,7 @@ For more information. Follow the [Manuel_de_reproduction_FR.pdf](https://github.
     sudo raspi-config
     ```
 10. Navigate to Display Options, and press enter.
-11. Navigate to the 4th line, Screen Blanking. Press Enter and select No.
+11. Navigate to the 4th line, Screen Blanking. Press Enter and select No. [link](https://raspberrytips.com/disable-sleep-mode-raspberry-pi/)
 12. Activate the SPI connection on the same menu.
 13. Then run:
     ```

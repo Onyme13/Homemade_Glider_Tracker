@@ -84,7 +84,8 @@ class CanvasPath:
     def click(self, event=None):
         if self.command is not None:
             self.command(self)
-
+            
+    #MODIFIED from original tkintermapview
     def draw(self, move=False):
         new_line_length = self.last_position_list_length != len(self.position_list)
         self.last_position_list_length = len(self.position_list)
